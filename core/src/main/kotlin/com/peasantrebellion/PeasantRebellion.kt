@@ -1,35 +1,35 @@
 package com.peasantrebellion
 
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.Texture.TextureFilter.Linear
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import ktx.app.KtxGame
-import ktx.app.KtxScreen
-import ktx.app.clearScreen
-import ktx.assets.disposeSafely
-import ktx.assets.toInternalFile
-import ktx.graphics.use
+import com.badlogic.gdx.ApplicationAdapter
+import com.badlogic.gdx.Gdx
 
-class PeasantRebellion : KtxGame<KtxScreen>() {
-    override fun create() {
-        addScreen(FirstScreen())
-        setScreen<FirstScreen>()
+class PeasantRebellion : ApplicationAdapter() {
+    companion object {
+        @Volatile
+        private var instance: PeasantRebellion? = null
+
+        fun getInstance() =
+            instance ?: synchronized(this) {
+                instance ?: PeasantRebellion().also { instance = it }
+            }
     }
-}
 
-class FirstScreen : KtxScreen {
-    private val image = Texture("logo.png".toInternalFile(), true).apply { setFilter(Linear, Linear) }
-    private val batch = SpriteBatch()
+    private lateinit var screen: Screen
 
-    override fun render(delta: Float) {
-        clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
-        batch.use {
-            it.draw(image, 100f, 160f)
-        }
+    fun switchTo(screen: Screen) {
+        this.screen.dispose()
+        this.screen = screen
+    }
+
+    override fun create() {
+        screen = Screen.mainMenu()
+    }
+
+    override fun render() {
+        screen.update(Gdx.graphics.deltaTime)
     }
 
     override fun dispose() {
-        image.disposeSafely()
-        batch.disposeSafely()
+        screen.dispose()
     }
 }
