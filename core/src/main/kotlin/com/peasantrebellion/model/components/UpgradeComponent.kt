@@ -1,6 +1,8 @@
 package com.peasantrebellion.model.components
 
-class UpgradeComponent {
+import com.badlogic.ashley.core.Component
+
+class UpgradeComponent : Component {
     var hasDoubleShot = false
     var hasTripleShot = false
     var hasDoubleDamage = false
