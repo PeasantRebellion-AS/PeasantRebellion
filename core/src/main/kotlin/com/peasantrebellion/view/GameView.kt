@@ -9,7 +9,7 @@ import ktx.graphics.use
 
 class GameView : View {
     private val image =
-        Texture("logo.png".toInternalFile(), true).apply {
+        Texture("player/player7.png".toInternalFile(), true).apply {
             setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         }
     private val batch = SpriteBatch()
@@ -17,7 +17,7 @@ class GameView : View {
     override fun render() {
         clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
         batch.use {
-            it.draw(image, 100f, 160f)
+            it.draw(image, 100f, 160f, image.width * 10f, image.height * 10f)
         }
     }
 
