@@ -1,8 +1,8 @@
 package com.peasantrebellion.model.components
 
 import com.badlogic.ashley.core.Component
-import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.graphics.Texture
 
-class BodyComponent(
-    var body: Rectangle,
+class TextureComponent(
+    var texture: Texture,
 ) : Component

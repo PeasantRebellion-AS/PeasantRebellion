@@ -2,35 +2,23 @@ package com.peasantrebellion.view
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.peasantrebellion.model.Game
+import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.TextureComponent
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
-import ktx.assets.toInternalFile
 import ktx.graphics.use
 
 class GameView(
     private val game: Game,
+    private val camera: OrthographicCamera,
 ) : View {
-    private val image =
-        Texture("player/player7.png".toInternalFile(), true).apply {
-            setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
-        }
-    private val worldWidth = 720f
-    private val worldHeight = 1280f
-
     private val batch = SpriteBatch()
-    private val camera = OrthographicCamera(worldWidth, worldHeight)
     private val viewport = FitViewport(camera.viewportWidth, camera.viewportHeight, camera)
     private val shapeRenderer = ShapeRenderer()
-
-    init {
-        camera.setToOrtho(false, worldWidth, worldHeight)
-        camera.update()
-    }
 
     override fun render() {
         clearScreen(red = 0f, green = 0f, blue = 0f)
@@ -39,19 +27,31 @@ class GameView(
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Filled) {
             it.color = Color.WHITE
-            it.rect(0f, 0f, worldWidth, worldHeight)
+            it.rect(0f, 0f, Game.WIDTH, Game.HEIGHT)
         }
 
         batch.projectionMatrix = camera.combined
         batch.use {
-            it.draw(image, 0f, 0f, image.width * 3f, image.height * 3f)
+            for (entity in game.entities(
+                TextureComponent::class.java,
+                BodyComponent::class.java,
+            )) {
+                val rectangle = entity.getComponent(BodyComponent::class.java).body
+                val texture = entity.getComponent(TextureComponent::class.java).texture
+                it.draw(texture, rectangle.x, rectangle.y, rectangle.width, rectangle.height)
+            }
         }
 
         camera.update()
     }
 
     override fun dispose() {
-        image.disposeSafely()
+        for (entity in game.entities(
+            TextureComponent::class.java,
+        )) {
+            val texture = entity.getComponent(TextureComponent::class.java).texture
+            texture.dispose()
+        }
         batch.disposeSafely()
     }
 
