@@ -32,4 +32,11 @@ class PeasantRebellion : ApplicationAdapter() {
     override fun dispose() {
         screen.dispose()
     }
+
+    override fun resize(
+        width: Int,
+        height: Int,
+    ) {
+        screen.resize(width, height)
+    }
 }

@@ -2,6 +2,7 @@ package com.peasantrebellion
 
 import com.peasantrebellion.controller.Controller
 import com.peasantrebellion.controller.GameController
+import com.peasantrebellion.model.Game
 import com.peasantrebellion.view.GameView
 import com.peasantrebellion.view.View
 
@@ -18,13 +19,19 @@ class Screen private constructor(
         view.dispose()
     }
 
+    fun resize(
+        width: Int,
+        height: Int,
+    ) {
+        view.resize(width, height)
+    }
+
     companion object {
         fun game(): Screen {
-            return Screen(GameController(), GameView())
+            val game = Game()
+            return Screen(GameController(game), GameView(game))
         }
 
-        fun mainMenu(): Screen {
-            return Screen(GameController(), GameView())
-        }
+        fun mainMenu(): Screen = game()
     }
 }
