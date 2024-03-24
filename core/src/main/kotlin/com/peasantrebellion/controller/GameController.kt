@@ -13,13 +13,16 @@ class GameController(
     private var x = 0f
 
     override fun update(deltaTime: Float) {
-        game.system(PlayerControlSystem::class.java).moveTo(
-            userTouch().x,
-        )
+        userTouch()?. let { touchPosition ->
+            game.system(PlayerControlSystem::class.java).moveTo(
+                touchPosition.x,
+            )
+        }
         game.update(deltaTime)
     }
 
-    private fun userTouch(): Vector3 {
+    private fun userTouch(): Vector3? {
+        if (!Gdx.input.isTouched) return null
         val position =
             Vector3(
                 Gdx.input.x.toFloat(),
