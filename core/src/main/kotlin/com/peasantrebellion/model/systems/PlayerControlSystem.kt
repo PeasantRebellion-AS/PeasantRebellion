@@ -10,8 +10,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class PlayerControlSystem : EntitySystem() {
-    private val bodyMapper: ComponentMapper<BodyComponent> =
-        ComponentMapper.getFor(BodyComponent::class.java)
+    private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
 
     private val playerFamily =
         Family.all(

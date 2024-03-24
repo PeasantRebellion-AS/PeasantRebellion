@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.ashley.utils.ImmutableArray
 import com.peasantrebellion.model.entities.player
+import com.peasantrebellion.model.systems.AnimationSystem
 import com.peasantrebellion.model.systems.EnemyMovementSystem
 import com.peasantrebellion.model.systems.PlayerControlSystem
 import com.peasantrebellion.model.systems.ShootingSystem
@@ -25,6 +26,7 @@ class Game {
         engine.addSystem(PlayerControlSystem())
         engine.addSystem(EnemyMovementSystem())
         engine.addSystem(ShootingSystem())
+        engine.addSystem(AnimationSystem())
         // Entities
         engine.addEntity(player())
     }

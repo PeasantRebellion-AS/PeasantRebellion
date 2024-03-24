@@ -19,16 +19,11 @@ class ShootingSystem : IteratingSystem(
         UpgradeComponent::class.java,
     ).get(),
 ) {
-    private val velocityMapper: ComponentMapper<VelocityComponent> =
-        ComponentMapper.getFor(VelocityComponent::class.java)
-    private val spriteMapper: ComponentMapper<TextureComponent> =
-        ComponentMapper.getFor(TextureComponent::class.java)
-    private val bodyMapper: ComponentMapper<BodyComponent> =
-        ComponentMapper.getFor(BodyComponent::class.java)
-    private val healthMapper: ComponentMapper<HealthComponent> =
-        ComponentMapper.getFor(HealthComponent::class.java)
-    private val upgradeMapper: ComponentMapper<UpgradeComponent> =
-        ComponentMapper.getFor(UpgradeComponent::class.java)
+    private val velocityMapper = ComponentMapper.getFor(VelocityComponent::class.java)
+    private val spriteMapper = ComponentMapper.getFor(TextureComponent::class.java)
+    private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
+    private val healthMapper = ComponentMapper.getFor(HealthComponent::class.java)
+    private val upgradeMapper = ComponentMapper.getFor(UpgradeComponent::class.java)
 
     override fun processEntity(
         entity: Entity?,
