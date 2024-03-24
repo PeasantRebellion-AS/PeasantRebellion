@@ -10,12 +10,11 @@ class GameController(
     private val game: Game,
     private val camera: OrthographicCamera,
 ) : Controller {
-    private var x = 0f
-
     override fun update(deltaTime: Float) {
         userTouch()?. let { touchPosition ->
-            game.system(PlayerControlSystem::class.java).moveTo(
+            game.system(PlayerControlSystem::class.java).moveTowards(
                 touchPosition.x,
+                deltaTime,
             )
         }
         game.update(deltaTime)

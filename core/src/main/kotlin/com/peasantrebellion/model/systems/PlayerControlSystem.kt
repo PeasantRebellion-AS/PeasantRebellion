@@ -9,6 +9,8 @@ import com.peasantrebellion.model.components.UserControlledComponent
 import kotlin.math.max
 import kotlin.math.min
 
+const val PLAYER_MOVEMENT_SPEED = 1400f
+
 class PlayerControlSystem : EntitySystem() {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
 
@@ -18,12 +20,27 @@ class PlayerControlSystem : EntitySystem() {
             UserControlledComponent::class.java,
         ).get()
 
-    fun moveTo(x: Float) {
+    fun moveTowards(
+        xTarget: Float,
+        deltaTime: Float,
+    ) {
+        // There won't be more than one player, but there might be zero.
         val players = engine.getEntitiesFor(playerFamily)
         for (player in players) {
             val body = bodyMapper[player].body
-            // So that the player's center is x, not the player's left side.
-            val xLeft = x - (body.width / 2)
+            // From player's center coordinate to left coordinate.
+            val xLeftTarget = xTarget - (body.width / 2)
+
+            val maxMovementDistance = deltaTime * PLAYER_MOVEMENT_SPEED
+
+            // Where the player actually ends up in the target's direction.
+            val xLeft =
+                body.x +
+                    if (body.x < xLeftTarget) {
+                        min(xLeftTarget - body.x, maxMovementDistance)
+                    } else {
+                        -min(body.x - xLeftTarget, maxMovementDistance)
+                    }
 
             val xWithinBounds = max(0f, min(Game.WIDTH - body.width, xLeft))
             body.x = xWithinBounds
