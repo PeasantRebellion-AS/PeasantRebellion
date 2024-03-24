@@ -29,7 +29,7 @@ fun player(): Entity {
     val textureWidth = textures[0].width * 3f
     // The texture is larger than the body should be.
     val bodyWidth = textureWidth * 0.4f
-    val bodyHeight = textureHeight * 0.65f
+    val bodyHeight = textureHeight * 0.6f
 
     return with(Entity()) {
         add(
@@ -55,7 +55,6 @@ fun player(): Entity {
                         textureHeight,
                     )
                 },
-                displayDebugBodyOutline = true,
             ),
         )
         add(

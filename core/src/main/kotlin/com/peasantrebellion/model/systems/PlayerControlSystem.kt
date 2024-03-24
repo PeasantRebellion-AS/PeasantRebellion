@@ -24,8 +24,8 @@ class PlayerControlSystem : EntitySystem() {
         xTarget: Float,
         deltaTime: Float,
     ) {
-        // There won't be more than one player, but there might be zero.
         val players = engine.getEntitiesFor(playerFamily)
+        // There won't be more than one player, but there might be zero.
         for (player in players) {
             val body = bodyMapper[player].body
             // From player's center coordinate to left coordinate.
