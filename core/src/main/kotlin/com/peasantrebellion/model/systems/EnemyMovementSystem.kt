@@ -16,18 +16,13 @@ class EnemyMovementSystem : IteratingSystem(
         TextureComponent::class.java,
     ).get(),
 ) {
-    private val velocityMapper: ComponentMapper<VelocityComponent> =
-        ComponentMapper.getFor(VelocityComponent::class.java)
-    private val bodyMapper: ComponentMapper<BodyComponent> =
-        ComponentMapper.getFor(BodyComponent::class.java)
-    private val spriteMapper: ComponentMapper<TextureComponent> =
-        ComponentMapper.getFor(TextureComponent::class.java)
+    private val velocityMapper = ComponentMapper.getFor(VelocityComponent::class.java)
+    private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
+    private val spriteMapper = ComponentMapper.getFor(TextureComponent::class.java)
 
     override fun processEntity(
         entity: Entity,
         deltaTime: Float,
     ) {
-        val body = bodyMapper.get(entity).body
-        body.x++
     }
 }

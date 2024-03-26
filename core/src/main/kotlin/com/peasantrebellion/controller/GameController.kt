@@ -10,16 +10,19 @@ class GameController(
     private val game: Game,
     private val camera: OrthographicCamera,
 ) : Controller {
-    private var x = 0f
-
     override fun update(deltaTime: Float) {
-        game.system(PlayerControlSystem::class.java).moveTo(
-            userTouch().x,
-        )
+        userTouch()?.let { touchPosition ->
+            game.system(PlayerControlSystem::class.java).moveTowards(
+                touchPosition.x,
+                deltaTime,
+            )
+        }
         game.update(deltaTime)
     }
 
-    private fun userTouch(): Vector3 {
+    // Returns Vector3 instead of Vector2 because only Vector3 can be unprojected by the camera.
+    private fun userTouch(): Vector3? {
+        if (!Gdx.input.isTouched) return null
         val position =
             Vector3(
                 Gdx.input.x.toFloat(),

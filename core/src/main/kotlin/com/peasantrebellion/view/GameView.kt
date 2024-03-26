@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
@@ -36,9 +37,23 @@ class GameView(
                 TextureComponent::class.java,
                 BodyComponent::class.java,
             )) {
-                val rectangle = entity.getComponent(BodyComponent::class.java).body
-                val texture = entity.getComponent(TextureComponent::class.java).texture
-                it.draw(texture, rectangle.x, rectangle.y, rectangle.width, rectangle.height)
+                val body = entity.getComponent(BodyComponent::class.java).body
+                val textureComponent = entity.getComponent(TextureComponent::class.java)
+                val textureBody = textureComponent.bodyToTextureRectangle(body)
+
+                it.draw(
+                    textureComponent.texture,
+                    textureBody.x,
+                    textureBody.y,
+                    textureBody.width,
+                    textureBody.height,
+                )
+
+                if (textureComponent.displayDebugBodyOutline) {
+                    it.end()
+                    displayDebugBodyOutline(body, shapeRenderer)
+                    it.begin()
+                }
             }
         }
 
@@ -60,5 +75,20 @@ class GameView(
         height: Int,
     ) {
         viewport.update(width, height)
+    }
+}
+
+private fun displayDebugBodyOutline(
+    body: Rectangle,
+    shapeRenderer: ShapeRenderer,
+) {
+    shapeRenderer.use(ShapeRenderer.ShapeType.Line) { sr ->
+        sr.color = Color.RED
+        sr.rect(
+            body.x,
+            body.y,
+            body.width,
+            body.height,
+        )
     }
 }
