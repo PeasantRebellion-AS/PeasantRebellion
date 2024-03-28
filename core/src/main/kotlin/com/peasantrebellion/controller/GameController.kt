@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Vector3
 import com.peasantrebellion.model.Game
-import com.peasantrebellion.model.systems.EnemyMovementSystem
 import com.peasantrebellion.model.systems.PlayerControlSystem
 
 class GameController(
@@ -18,8 +17,6 @@ class GameController(
                 deltaTime,
             )
         }
-        // Moves enemies
-        game.system(EnemyMovementSystem::class.java).move(deltaTime)
         game.update(deltaTime)
     }
 
