@@ -43,4 +43,6 @@ class Game {
         const val WIDTH = 720f
         const val HEIGHT = 1280f
     }
+
+    enum class Conclusion { WIN, LOSS }
 }

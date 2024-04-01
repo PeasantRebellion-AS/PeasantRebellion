@@ -3,7 +3,9 @@ package com.peasantrebellion
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.peasantrebellion.controller.Controller
 import com.peasantrebellion.controller.GameController
+import com.peasantrebellion.controller.GameEndController
 import com.peasantrebellion.model.Game
+import com.peasantrebellion.view.GameEndView
 import com.peasantrebellion.view.GameView
 import com.peasantrebellion.view.View
 
@@ -43,5 +45,12 @@ class Screen private constructor(
         }
 
         fun mainMenu(): Screen = game()
+
+        fun gameEnd(conclusion: Game.Conclusion): Screen {
+            return Screen(
+                GameEndController(),
+                GameEndView(),
+            )
+        }
     }
 }
