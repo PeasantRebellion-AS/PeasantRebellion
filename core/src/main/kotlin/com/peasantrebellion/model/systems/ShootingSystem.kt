@@ -12,9 +12,7 @@ import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.arrow
 
-// TODO: Add collision detection
-
-const val ARROW_SPEED = 500f // Temporary value, can be adjusted
+const val ARROW_SPEED = 400f // Temporary value, can be adjusted
 
 class ShootingSystem : IteratingSystem(
     Family.all(
@@ -52,9 +50,50 @@ class ShootingSystem : IteratingSystem(
 
             body.y += ARROW_SPEED * deltaTime * direction
 
+            checkCollision(arrow, direction)
+
             // Removes arrows that are off-screen
             if (body.y + body.height <= 0f || body.y - body.height >= Game.HEIGHT) {
                 engine.removeEntity(arrow)
+            }
+        }
+    }
+
+    private fun checkCollision(
+        arrow: Entity,
+        direction: Int,
+    ) {
+        val arrowBody = bodyMapper[arrow].body
+
+        if (direction < 0) {
+            // Arrow was shot by enemy, check player collision
+            val players = engine.getEntitiesFor(Family.all(UserControlledComponent::class.java).get())
+            for (player in players) {
+                val playerBody = bodyMapper[player].body
+                if (arrowBody.overlaps(playerBody)) {
+                    println("Player collision")
+                    engine.removeEntity(arrow)
+                    // Implement health logic
+                }
+            }
+        } else {
+            // Arrow was shot by player, check enemy collision
+            val enemies =
+                engine.getEntitiesFor(
+                    Family.all(
+                        AnimationComponent::class.java,
+                        BodyComponent::class.java,
+                        TextureComponent::class.java,
+                    ).exclude(UserControlledComponent::class.java).get(),
+                )
+            for (enemy in enemies) {
+                val enemyBody = bodyMapper[enemy].body
+                if (arrowBody.overlaps(enemyBody)) {
+                    println("Enemy collision")
+                    engine.removeEntity(arrow)
+                    // Temporarily just removes the enemy, should implement health logic here
+                    engine.removeEntity(enemy)
+                }
             }
         }
     }
