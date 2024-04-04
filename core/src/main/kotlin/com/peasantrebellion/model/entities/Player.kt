@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import ktx.assets.toInternalFile
@@ -63,6 +64,7 @@ fun player(): Entity {
                 textures,
             ),
         )
+        add(ShooterComponent(0.7f))
         add(UserControlledComponent())
     }
 }
