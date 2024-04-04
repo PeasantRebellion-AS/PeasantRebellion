@@ -12,6 +12,7 @@ fun arrow(
     xPos: Float,
     yPos: Float,
     fromPlayer: Boolean,
+    movementSpeed: Float,
 ): Entity {
     // Arrow pointing upwards if shot by player, pointing downwards otherwise
     val path = if (fromPlayer) "player/arrow.png" else "peasant/arrow.png"
@@ -51,6 +52,6 @@ fun arrow(
                 },
             ),
         )
-        add(ProjectileComponent(direction))
+        add(ProjectileComponent(direction, movementSpeed))
     }
 }
