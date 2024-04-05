@@ -32,6 +32,8 @@ fun player(): Entity {
     val bodyWidth = textureWidth * 0.4f
     val bodyHeight = textureHeight * 0.6f
 
+    val drawTime = 0.7f
+
     return with(Entity()) {
         add(
             BodyComponent(
@@ -64,7 +66,7 @@ fun player(): Entity {
                 textures,
             ),
         )
-        add(ShooterComponent(0.7f))
+        add(ShooterComponent(drawTime = drawTime))
         add(UserControlledComponent())
     }
 }
