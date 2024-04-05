@@ -25,4 +25,11 @@ class GameView : View {
         image.disposeSafely()
         batch.disposeSafely()
     }
+
+    override fun resize(
+        width: Int,
+        height: Int,
+    ) {
+
+    }
 }
