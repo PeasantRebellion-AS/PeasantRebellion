@@ -18,12 +18,12 @@ class PlayerShootingSystem : IteratingSystem(
 ) {
     private var timeSinceLastShot = 0f
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
-    private val shooterMapper = ComponentMapper.getFor(ShooterComponent::class.java)
     private val animationMapper = ComponentMapper.getFor(AnimationComponent::class.java)
+    private val shooterMapper = ComponentMapper.getFor(ShooterComponent::class.java)
 
     private fun shoot(entity: Entity) {
         val shooterBody = bodyMapper[entity].body
-        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, true, 1000f))
+        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, true, 750f))
         timeSinceLastShot = 0f
     }
 
@@ -37,8 +37,7 @@ class PlayerShootingSystem : IteratingSystem(
         deltaTime: Float,
     ) {
         animationMapper[entity].isIdle = false
-        val drawTime = shooterMapper[entity].drawTime
-        if (timeSinceLastShot >= drawTime) {
+        if (timeSinceLastShot >= shooterMapper[entity].drawTime) {
             shoot(entity)
         }
     }

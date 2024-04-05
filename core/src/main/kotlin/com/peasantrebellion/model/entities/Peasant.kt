@@ -20,6 +20,7 @@ fun peasant(
     difficulty: String,
     xPos: Float,
     yPos: Float,
+    fireRate: Float,
 ): Entity {
     val textures: List<Texture> =
         listOf(
@@ -37,6 +38,7 @@ fun peasant(
     val textureWidth = textures[0].width * 3f
     val bodyWidth = textureWidth * 0.4f
     val bodyHeight = textureHeight * 0.6f
+    val drawTime = 0.8f
 
     return with(Entity()) {
         add(
@@ -65,10 +67,10 @@ fun peasant(
         add(
             AnimationComponent(
                 // Since we only have 5 textures for the peasants but 7 for the player, we need to have a longer time per texture
-                0.14f,
+                drawTime / textures.size,
                 textures,
             ),
         )
-        add(ShooterComponent(0.7f))
+        add(ShooterComponent(fireRate, drawTime))
     }
 }

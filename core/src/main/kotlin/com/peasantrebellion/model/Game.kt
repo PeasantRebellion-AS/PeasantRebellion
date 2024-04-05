@@ -36,12 +36,12 @@ class Game {
         // Entities
         engine.addEntity(player())
         // For testing
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f))
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f - 100f))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f - 100f))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f - 100f))
+        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f, 0.5f))
+        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f - 100f, 0.5f))
+        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f, 1f))
+        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f - 100f, 1f))
+        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f, 1.5f))
+        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f - 100f, 1.5f))
     }
 
     fun update(deltaTime: Float) {

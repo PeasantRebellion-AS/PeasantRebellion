@@ -25,7 +25,8 @@ class CollisionSystem : IteratingSystem(
 
         if (direction < 0) {
             // Arrow was shot by enemy, check player collision
-            val players = engine.getEntitiesFor(Family.all(UserControlledComponent::class.java).get())
+            val players =
+                engine.getEntitiesFor(Family.all(UserControlledComponent::class.java).get())
             for (player in players) {
                 val playerBody = bodyMapper[player].body
                 if (arrowBody.overlaps(playerBody)) {
@@ -49,6 +50,7 @@ class CollisionSystem : IteratingSystem(
                     engine.removeEntity(entity)
                     // Temporarily just removes the enemy, should implement health logic here
                     engine.removeEntity(enemy)
+                    break
                 }
             }
         }

@@ -9,6 +9,7 @@ import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.arrow
+import kotlin.random.Random
 
 class EnemyShootingSystem : IteratingSystem(
     Family.all(
@@ -21,10 +22,19 @@ class EnemyShootingSystem : IteratingSystem(
 
     private fun shoot(entity: Entity) {
         val shooterBody = bodyMapper[entity].body
-        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, false, 1000f))
+        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, false, 500f))
+        animationMapper[entity].isIdle = true
+        animationMapper[entity].timeElapsed = 0f
+    }
+
+    private fun draw(entity: Entity) {
+        animationMapper[entity].isIdle = false
+        shooterMapper[entity].timeSinceLastDraw = 0f
     }
 
     override fun update(deltaTime: Float) {
+        val enemies = engine.getEntitiesFor(family)
+
         super.update(deltaTime)
     }
 
@@ -35,15 +45,27 @@ class EnemyShootingSystem : IteratingSystem(
         val enemies = engine.getEntitiesFor(family)
         val body = bodyMapper[entity].body
 
-        val canShoot =
-            enemies.none { e ->
+        shooterMapper[entity].timeSinceLastDraw += deltaTime
+        val timeSinceLastDraw = shooterMapper[entity].timeSinceLastDraw
+
+        val isBlocked =
+            enemies.any { e ->
                 val b = bodyMapper[e].body
 
                 b.x == body.x && b.y < body.y
             }
-
-        if (canShoot) {
-            animationMapper[entity].isIdle = false
+        val isIdle = animationMapper[entity].isIdle
+        val drawTime = shooterMapper[entity].drawTime
+        if (!isBlocked && timeSinceLastDraw >= drawTime) {
+            if (!isIdle) {
+                shoot(entity)
+            }
+            val fireRate = shooterMapper[entity].fireRate
+            val peasantDecidedToDraw =
+                Random.nextFloat() < fireRate * deltaTime
+            if (peasantDecidedToDraw) {
+                draw(entity)
+            }
         }
     }
 }
