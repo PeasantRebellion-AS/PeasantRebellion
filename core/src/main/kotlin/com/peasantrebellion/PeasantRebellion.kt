@@ -4,21 +4,25 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 
 class PeasantRebellion : ApplicationAdapter() {
+    private lateinit var screen: Screen
+
     companion object {
         @Volatile
         private var instance: PeasantRebellion? = null
 
-        fun getInstance() =
+        fun getInstance(): PeasantRebellion =
             instance ?: synchronized(this) {
                 instance ?: PeasantRebellion().also { instance = it }
             }
-    }
 
-    private lateinit var screen: Screen
-
-    fun switchTo(screen: Screen) {
-        this.screen.dispose()
-        this.screen = screen
+        fun switchTo(screen: Screen) {
+            getInstance().let { app ->
+                if (app::screen.isInitialized) {
+                    app.screen.dispose()
+                }
+                app.screen = screen
+            }
+        }
     }
 
     override fun create() {
@@ -30,6 +34,8 @@ class PeasantRebellion : ApplicationAdapter() {
     }
 
     override fun dispose() {
-        screen.dispose()
+        if (::screen.isInitialized) {
+            screen.dispose()
+        }
     }
 }
