@@ -3,8 +3,10 @@ package com.peasantrebellion
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.peasantrebellion.controller.Controller
 import com.peasantrebellion.controller.GameController
+import com.peasantrebellion.controller.SettingsController
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.view.GameView
+import com.peasantrebellion.view.SettingsView
 import com.peasantrebellion.view.View
 
 class Screen private constructor(
@@ -40,6 +42,10 @@ class Screen private constructor(
                 GameController(game, camera),
                 GameView(game, camera),
             )
+        }
+
+        fun settings(): Screen{
+            return Screen(SettingsController(), SettingsView())
         }
 
         fun mainMenu(): Screen = game()
