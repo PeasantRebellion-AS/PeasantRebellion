@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.peasantrebellion.controller.Controller
 import com.peasantrebellion.controller.GameController
 import com.peasantrebellion.controller.MainMenuController
+import com.peasantrebellion.model.Game
 import com.peasantrebellion.view.GameView
 import com.peasantrebellion.view.MainMenuView
 import com.peasantrebellion.view.View
@@ -21,9 +22,26 @@ class Screen private constructor(
         view.dispose()
     }
 
+    fun resize(
+        width: Int,
+        height: Int,
+    ) {
+        view.resize(width, height)
+    }
+
     companion object {
         fun game(): Screen {
-            return Screen(GameController(), GameView())
+            val game = Game()
+
+            // Camera is used both for rendering and user input.
+            val camera = OrthographicCamera(Game.WIDTH, Game.HEIGHT)
+            camera.setToOrtho(false, Game.WIDTH, Game.HEIGHT)
+            camera.update()
+
+            return Screen(
+                GameController(game, camera),
+                GameView(game, camera),
+            )
         }
 
         fun mainMenu(): Screen {
