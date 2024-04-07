@@ -14,14 +14,14 @@ class PeasantRebellion : ApplicationAdapter() {
             instance ?: synchronized(this) {
                 instance ?: PeasantRebellion().also { instance = it }
             }
+    }
 
-        fun switchTo(screen: Screen) {
-            getInstance().let { app ->
-                if (app::screen.isInitialized) {
-                    app.screen.dispose()
-                }
-                app.screen = screen
+    fun switchTo(screen: Screen) {
+        getInstance().let { app ->
+            if (app::screen.isInitialized) {
+                app.screen.dispose()
             }
+            app.screen = screen
         }
     }
 

@@ -7,6 +7,7 @@ class Button(texture: Texture, val x: Float, val y: Float) {
     private val height = texture.height.toFloat()
     val buttonTexture = texture
 
+    // Function for detecting if user input is within bounds of button
     fun containsCoordinates(
         touchX: Float,
         touchY: Float,
