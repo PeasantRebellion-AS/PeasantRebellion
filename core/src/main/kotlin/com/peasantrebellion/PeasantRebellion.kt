@@ -3,6 +3,13 @@ package com.peasantrebellion
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.utils.viewport.FitViewport
+import com.badlogic.gdx.utils.viewport.Viewport
+import com.peasantrebellion.model.Game
+
+const val SCREEN_WIDTH = 720f
+const val SCREEN_HEIGHT = 1280f
 
 class PeasantRebellion : ApplicationAdapter() {
     private lateinit var screen: Screen
@@ -18,6 +25,8 @@ class PeasantRebellion : ApplicationAdapter() {
     }
 
     private lateinit var music: Music
+    lateinit var viewport: FitViewport
+        private set
 
     fun switchTo(screen: Screen) {
         getInstance().let { app ->
@@ -29,8 +38,13 @@ class PeasantRebellion : ApplicationAdapter() {
     }
 
     override fun create() {
+        // Viewport
+        val camera = OrthographicCamera(Game.WIDTH, Game.HEIGHT)
+        camera.setToOrtho(false, Game.WIDTH, Game.HEIGHT)
+        camera.update()
+        viewport = FitViewport(camera.viewportWidth, camera.viewportHeight, camera)
+        // Initial screen
         screen = Screen.mainMenu()
-
         // Music
         music = Gdx.audio.newMusic(Gdx.files.internal("peasant_rebellion_music.mp3"))
         music.play()
@@ -52,6 +66,6 @@ class PeasantRebellion : ApplicationAdapter() {
         width: Int,
         height: Int,
     ) {
-        screen.resize(width, height)
+        viewport.update(width, height)
     }
 }

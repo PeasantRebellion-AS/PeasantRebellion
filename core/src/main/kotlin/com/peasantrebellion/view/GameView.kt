@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.TextureComponent
@@ -15,23 +16,22 @@ import ktx.graphics.use
 
 class GameView(
     private val game: Game,
-    private val camera: OrthographicCamera,
 ) : View {
+    private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
-    private val viewport = FitViewport(camera.viewportWidth, camera.viewportHeight, camera)
     private val shapeRenderer = ShapeRenderer()
 
     override fun render() {
         clearScreen(red = 0f, green = 0f, blue = 0f)
 
         // Temp background
-        shapeRenderer.projectionMatrix = camera.combined
+        shapeRenderer.projectionMatrix = viewport.camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Filled) {
             it.color = Color.WHITE
             it.rect(0f, 0f, Game.WIDTH, Game.HEIGHT)
         }
 
-        batch.projectionMatrix = camera.combined
+        batch.projectionMatrix = viewport.camera.combined
         batch.use {
             for (entity in game.entities(
                 TextureComponent::class.java,
@@ -57,7 +57,7 @@ class GameView(
             }
         }
 
-        camera.update()
+        viewport.camera.update()
     }
 
     override fun dispose() {
@@ -68,13 +68,6 @@ class GameView(
             texture.dispose()
         }
         batch.disposeSafely()
-    }
-
-    override fun resize(
-        width: Int,
-        height: Int,
-    ) {
-        viewport.update(width, height)
     }
 }
 

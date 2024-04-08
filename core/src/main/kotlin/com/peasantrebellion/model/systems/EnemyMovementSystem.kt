@@ -53,7 +53,7 @@ class EnemyMovementSystem : IteratingSystem(
         // Check for game over
         if (enemies.any { bodyMapper[it].body.y < GAME_OVER_LINE_Y }) {
             PeasantRebellion.getInstance().switchTo(
-                Screen.gameEnd(Game.Conclusion.LOSS),
+                Screen.gameEnd(100),
             )
         }
     }
