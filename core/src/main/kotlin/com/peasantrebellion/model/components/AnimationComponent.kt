@@ -9,4 +9,5 @@ class AnimationComponent(
     val textures: List<Texture>,
 ) : Component {
     var timeElapsed = 0f
+    var isIdle = true
 }

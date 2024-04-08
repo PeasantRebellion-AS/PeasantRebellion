@@ -20,13 +20,12 @@ class EnemyMovementSystem : IteratingSystem(
     ).exclude(UserControlledComponent::class.java).get(),
 ) {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
-    private val enemyFamily = Family.all(BodyComponent::class.java).exclude(UserControlledComponent::class.java).get()
     private var direction = 1 // The direction of the peasant, 1 for right, -1 for left, 0 for no movement
 
     override fun update(deltaTime: Float) {
         super.update(deltaTime)
 
-        val enemies = engine.getEntitiesFor(enemyFamily)
+        val enemies = engine.getEntitiesFor(family)
         var moveDown = false
         // Check if any of the peasants hit a wall. If so, move down and change direction
         for (enemy in enemies) {
