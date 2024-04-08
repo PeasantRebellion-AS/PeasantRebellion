@@ -1,11 +1,9 @@
 package com.peasantrebellion.view
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
@@ -33,10 +31,17 @@ class GameView(
 
         batch.projectionMatrix = viewport.camera.combined
         batch.use {
-            for (entity in game.entities(
-                TextureComponent::class.java,
-                BodyComponent::class.java,
-            )) {
+            // Render entities ordered by y coordinate so that the furthest-down entities are
+            // above the ones higher up.
+            val entitiesToRender =
+                game.entities(
+                    TextureComponent::class.java,
+                    BodyComponent::class.java,
+                ).sortedByDescending { entity ->
+                    entity.getComponent(BodyComponent::class.java).body.y
+                }
+
+            for (entity in entitiesToRender) {
                 val body = entity.getComponent(BodyComponent::class.java).body
                 val textureComponent = entity.getComponent(TextureComponent::class.java)
                 val textureBody = textureComponent.bodyToTextureRectangle(body)
