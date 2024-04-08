@@ -6,6 +6,8 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.ashley.utils.ImmutableArray
+import com.peasantrebellion.SCREEN_HEIGHT
+import com.peasantrebellion.SCREEN_WIDTH
 import com.peasantrebellion.model.entities.peasant
 import com.peasantrebellion.model.entities.player
 import com.peasantrebellion.model.systems.AnimationSystem
@@ -49,7 +51,7 @@ class Game {
     }
 
     companion object World {
-        const val WIDTH = 720f
-        const val HEIGHT = 1280f
+        const val WIDTH = SCREEN_WIDTH
+        const val HEIGHT = SCREEN_HEIGHT
     }
 }

@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
+import com.peasantrebellion.PeasantRebellion
+import com.peasantrebellion.Screen
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
@@ -11,6 +13,9 @@ import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 
 const val ENEMY_MOVEMENT_SPEED = 50f // Temporary value, can be adjusted
+
+// Once the enemies cross this line, the player loses.
+const val GAME_OVER_LINE_Y = 150f
 
 class EnemyMovementSystem : IteratingSystem(
     Family.all(
@@ -42,6 +47,13 @@ class EnemyMovementSystem : IteratingSystem(
                 val b = bodyMapper[e].body
                 b.y -= b.height / 2
             }
+        }
+
+        // Check for game over
+        if (enemies.any { bodyMapper[it].body.y < GAME_OVER_LINE_Y }) {
+            PeasantRebellion.getInstance().switchTo(
+                Screen.gameEnd(100),
+            )
         }
     }
 

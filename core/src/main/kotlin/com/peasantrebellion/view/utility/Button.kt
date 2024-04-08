@@ -1,11 +1,15 @@
-package com.peasantrebellion.view
+package com.peasantrebellion.view.utility
 
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.Rectangle
 
-class Button(texture: Texture, val x: Float, val y: Float) {
-    private val width = texture.width.toFloat()
-    private val height = texture.height.toFloat()
-    val buttonTexture = texture
+class Button(
+    val texture: Texture,
+    val x: Float,
+    val y: Float,
+) {
+    val width = texture.width.toFloat()
+    val height = texture.height.toFloat()
 
     // Function for detecting if user input is within bounds of button
     fun containsCoordinates(

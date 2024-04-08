@@ -6,21 +6,23 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.peasantrebellion.PeasantRebellion
+import com.peasantrebellion.SCREEN_HEIGHT
+import com.peasantrebellion.SCREEN_WIDTH
+import com.peasantrebellion.view.utility.Button
+import com.peasantrebellion.view.utility.MenuFont
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 
-class MainMenuView(
-    val camera: OrthographicCamera,
-) : View {
+class MainMenuView : View {
+    private val viewport = PeasantRebellion.getInstance().viewport
     private val background = Texture("menu/main_menu_background.png")
     private val largeButton = Texture("menu/large_button.png")
-    private val generator = FreeTypeFontGenerator(Gdx.files.internal("Peralta-Regular.ttf"))
-    private var font = generator.generateFont(FreeTypeFontGenerator.FreeTypeFontParameter())
     private val batch = SpriteBatch()
+    private val menuFont = MenuFont()
     private val heightOffset = largeButton.height / 2 + 15f
     private val widthOffset = largeButton.width / 2
-    private val viewport = FitViewport(camera.viewportWidth, camera.viewportHeight, camera)
     private val crown = Texture("menu/crown.png")
     val buttons =
         listOf(
@@ -34,18 +36,17 @@ class MainMenuView(
 
     override fun render() {
         clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
-        batch.projectionMatrix = camera.combined
+        batch.projectionMatrix = viewport.camera.combined
         background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         batch.use {
             it.draw(background, 0f, 0f)
             it.draw(crown, WIDTH / 2 + 111f, HEIGHT / 2 + largeButton.height / 2 + 206f)
             for (button in buttons) {
-                it.draw(button.buttonTexture, button.x, button.y)
+                it.draw(button.texture, button.x, button.y)
             }
         }
         batch.begin()
-        font.setColor(0f, 0f, 0f, 1f)
-        font.data.setScale(3f)
+        val font = menuFont.font
         font.draw(
             batch,
             "Singleplayer",
@@ -77,27 +78,19 @@ class MainMenuView(
             HEIGHT / 2 + heightOffset - 150f,
         )
         batch.end()
-        camera.update()
+        viewport.camera.update()
     }
 
     override fun dispose() {
         background.disposeSafely()
         largeButton.disposeSafely()
         batch.disposeSafely()
-        generator.disposeSafely()
         crown.disposeSafely()
-        font.disposeSafely()
-    }
-
-    override fun resize(
-        width: Int,
-        height: Int,
-    ) {
-        viewport.update(width, height)
+        menuFont.disposeSafely()
     }
 
     companion object ScreenSize {
-        const val WIDTH = 720f
-        const val HEIGHT = 1280f
+        const val WIDTH = SCREEN_WIDTH
+        const val HEIGHT = SCREEN_HEIGHT
     }
 }
