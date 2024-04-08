@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component
 
 class ShooterComponent(
     val fireRate: Float = Float.POSITIVE_INFINITY,
-    val drawTime: Float,
+    val drawDuration: Float,
 ) : Component {
     var timeSinceLastDraw = 0f
 }

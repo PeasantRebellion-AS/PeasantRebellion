@@ -11,11 +11,11 @@ import ktx.assets.toInternalFile
 fun arrow(
     xPos: Float,
     yPos: Float,
-    fromPlayer: Boolean,
-    movementSpeed: Float,
+    xVelocity: Float,
+    yVelocity: Float,
 ): Entity {
     // Arrow pointing upwards if shot by player, pointing downwards otherwise
-    val path = if (fromPlayer) "player/arrow.png" else "peasant/arrow.png"
+    val path = if (yVelocity > 0) "player/arrow.png" else "peasant/arrow.png"
     val texture =
         Texture(path.toInternalFile(), true).apply {
             setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
@@ -25,8 +25,6 @@ fun arrow(
     val textureWidth = texture.width * 3f
     val bodyWidth = textureWidth * 0.4f
     val bodyHeight = textureHeight * 0.85f
-
-    val direction = if (fromPlayer) 1 else -1
 
     return with(Entity()) {
         add(
@@ -52,6 +50,6 @@ fun arrow(
                 },
             ),
         )
-        add(ProjectileComponent(direction, movementSpeed))
+        add(ProjectileComponent(xVelocity, yVelocity))
     }
 }

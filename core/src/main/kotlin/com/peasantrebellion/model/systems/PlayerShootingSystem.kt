@@ -14,30 +14,27 @@ class PlayerShootingSystem : IteratingSystem(
     Family.all(
         ShooterComponent::class.java,
         UserControlledComponent::class.java,
+        BodyComponent::class.java,
+        AnimationComponent::class.java,
     ).get(),
 ) {
-    private var timeSinceLastShot = 0f
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
     private val animationMapper = ComponentMapper.getFor(AnimationComponent::class.java)
     private val shooterMapper = ComponentMapper.getFor(ShooterComponent::class.java)
 
     private fun shoot(entity: Entity) {
         val shooterBody = bodyMapper[entity].body
-        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, true, 750f))
-        timeSinceLastShot = 0f
-    }
-
-    override fun update(deltaTime: Float) {
-        super.update(deltaTime)
-        timeSinceLastShot += deltaTime
+        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, 0f, 750f))
+        shooterMapper[entity].timeSinceLastDraw = 0f
     }
 
     override fun processEntity(
         entity: Entity,
         deltaTime: Float,
     ) {
+        val timeSinceLastDraw = shooterMapper[entity].apply { timeSinceLastDraw += deltaTime }.timeSinceLastDraw
         animationMapper[entity].isIdle = false
-        if (timeSinceLastShot >= shooterMapper[entity].drawTime) {
+        if (timeSinceLastDraw >= shooterMapper[entity].drawDuration) {
             shoot(entity)
         }
     }

@@ -14,6 +14,8 @@ import kotlin.random.Random
 class EnemyShootingSystem : IteratingSystem(
     Family.all(
         ShooterComponent::class.java,
+        BodyComponent::class.java,
+        AnimationComponent::class.java,
     ).exclude(UserControlledComponent::class.java).get(),
 ) {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
@@ -22,20 +24,14 @@ class EnemyShootingSystem : IteratingSystem(
 
     private fun shoot(entity: Entity) {
         val shooterBody = bodyMapper[entity].body
-        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, false, 500f))
+        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, 0f, -500f))
         animationMapper[entity].isIdle = true
         animationMapper[entity].timeElapsed = 0f
     }
 
-    private fun draw(entity: Entity) {
+    private fun drawBow(entity: Entity) {
         animationMapper[entity].isIdle = false
         shooterMapper[entity].timeSinceLastDraw = 0f
-    }
-
-    override fun update(deltaTime: Float) {
-        val enemies = engine.getEntitiesFor(family)
-
-        super.update(deltaTime)
     }
 
     override fun processEntity(
@@ -49,13 +45,13 @@ class EnemyShootingSystem : IteratingSystem(
         val timeSinceLastDraw = shooterMapper[entity].timeSinceLastDraw
 
         val isBlocked =
-            enemies.any { e ->
-                val b = bodyMapper[e].body
+            enemies.any { otherEnemy ->
+                val otherEnemyBody = bodyMapper[otherEnemy].body
 
-                b.x == body.x && b.y < body.y
+                otherEnemyBody.x == body.x && otherEnemyBody.y < body.y
             }
         val isIdle = animationMapper[entity].isIdle
-        val drawTime = shooterMapper[entity].drawTime
+        val drawTime = shooterMapper[entity].drawDuration
         if (!isBlocked && timeSinceLastDraw >= drawTime) {
             if (!isIdle) {
                 shoot(entity)
@@ -64,7 +60,7 @@ class EnemyShootingSystem : IteratingSystem(
             val peasantDecidedToDraw =
                 Random.nextFloat() < fireRate * deltaTime
             if (peasantDecidedToDraw) {
-                draw(entity)
+                drawBow(entity)
             }
         }
     }

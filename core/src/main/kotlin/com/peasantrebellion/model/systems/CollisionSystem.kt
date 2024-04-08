@@ -11,7 +11,7 @@ import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 
 class CollisionSystem : IteratingSystem(
-    Family.all(ProjectileComponent::class.java).get(),
+    Family.all(ProjectileComponent::class.java, BodyComponent::class.java).get(),
 ) {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
     private val projectileMapper = ComponentMapper.getFor(ProjectileComponent::class.java)
@@ -21,9 +21,9 @@ class CollisionSystem : IteratingSystem(
         deltaTime: Float,
     ) {
         val arrowBody = bodyMapper[entity].body
-        val direction = projectileMapper[entity].direction
+        val yVelocity = projectileMapper[entity].yVelocity
 
-        if (direction < 0) {
+        if (yVelocity < 0) {
             // Arrow was shot by enemy, check player collision
             val players =
                 engine.getEntitiesFor(Family.all(UserControlledComponent::class.java).get())

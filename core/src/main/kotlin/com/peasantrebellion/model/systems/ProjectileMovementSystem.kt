@@ -19,12 +19,12 @@ class ProjectileMovementSystem : IteratingSystem(
         deltaTime: Float,
     ) {
         val body = bodyMapper[entity].body
-        val direction = projectileMapper[entity].direction
-        val movementSpeed = projectileMapper[entity].movementSpeed
-
-        body.y += movementSpeed * deltaTime * direction
-
-        if (body.y + body.height <= 0f || body.y - body.height >= Game.HEIGHT) {
+        val xVelocity = projectileMapper[entity].xVelocity
+        val yVelocity = projectileMapper[entity].yVelocity
+        body.y += yVelocity * deltaTime
+        body.x += xVelocity * deltaTime
+        val isOutOfBounds = body.y + body.height <= 0f || body.y - body.height >= Game.HEIGHT
+        if (isOutOfBounds) {
             engine.removeEntity(entity)
         }
     }
