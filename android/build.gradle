@@ -73,6 +73,20 @@ dependencies {
   natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
   natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
   natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+
+  // firebase
+  implementation "pl.mk5.gdx-fireapp:gdx-fireapp-android:$gdxFireappVersion" // the version you are using
+
+  implementation platform("com.google.firebase:firebase-bom:32.8.0")
+  implementation 'com.google.firebase:firebase-core'
+  implementation 'com.google.firebase:firebase-storage'
+  implementation 'com.google.firebase:firebase-auth'
+  implementation 'com.google.firebase:firebase-database'
+  implementation 'com.google.firebase:firebase-crashlytics'
+  implementation 'com.google.firebase:firebase-analytics'
+
+  // Add this if you need google authorization
+  //implementation 'com.google.android.gms:play-services-auth:21.0.0'
 }
 
 // Called every time gradle gets executed, takes the native dependencies of
