@@ -12,7 +12,7 @@ import com.peasantrebellion.model.entities.peasant
 
 class EnemyWaveSystem(private val engine: Engine) : EntitySystem() {
     private val initialDelay = 0f
-    private val waveInterval = 11f
+    private val waveInterval = 15f
     private val numLines = 2
     private val numPeasantsPerLine = 6
     private val spacingX = 100f
