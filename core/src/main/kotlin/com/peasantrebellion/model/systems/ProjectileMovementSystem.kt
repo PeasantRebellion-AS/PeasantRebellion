@@ -23,7 +23,9 @@ class ProjectileMovementSystem : IteratingSystem(
         val yVelocity = projectileMapper[entity].yVelocity
         body.y += yVelocity * deltaTime
         body.x += xVelocity * deltaTime
-        val isOutOfBounds = body.y + body.height <= 0f || body.y - body.height >= Game.HEIGHT
+        val isOutOfBounds =
+            (body.y + body.height <= 0f || body.y - body.height >= Game.HEIGHT) ||
+                (body.x + body.width <= 0f || body.x - body.width >= Game.WIDTH)
         if (isOutOfBounds) {
             engine.removeEntity(entity)
         }
