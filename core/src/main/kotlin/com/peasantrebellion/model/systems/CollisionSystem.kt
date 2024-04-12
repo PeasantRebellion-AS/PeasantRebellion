@@ -49,6 +49,8 @@ class CollisionSystem : IteratingSystem(
                 if (arrowBody.overlaps(enemyBody)) {
                     engine.removeEntity(entity)
                     // Temporarily just removes the enemy, should implement health logic here
+                    engine.getSystem(CopperCoinSystem::class.java)
+                        .giveCoinsToPlayer(enemy)
                     engine.removeEntity(enemy)
                     break
                 }
