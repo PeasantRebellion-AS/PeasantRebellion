@@ -1,17 +1,20 @@
 package com.peasantrebellion.model.entities
 
 import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.Family
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.HealthComponent
+import com.peasantrebellion.model.components.ProjectileComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import ktx.assets.toInternalFile
 
-fun player(): Entity {
+fun player(onCollisionWithArrow: (player: Entity, arrow: Entity) -> Unit): Entity {
     val textures: List<Texture> =
         listOf(
             "player/player1.png",
@@ -43,6 +46,8 @@ fun player(): Entity {
                     bodyWidth,
                     bodyHeight,
                 ),
+                onCollision = onCollisionWithArrow,
+                entitiesToCollideWith = Family.all(ProjectileComponent::class.java).get(),
             ),
         )
         add(
@@ -68,5 +73,6 @@ fun player(): Entity {
         )
         add(ShooterComponent(drawDuration = playerDrawDuration))
         add(UserControlledComponent())
+        add(HealthComponent(3))
     }
 }
