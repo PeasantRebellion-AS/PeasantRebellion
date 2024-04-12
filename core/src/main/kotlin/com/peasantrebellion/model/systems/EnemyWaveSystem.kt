@@ -38,7 +38,7 @@ class EnemyWaveSystem(private val engine: Engine) : EntitySystem() {
             ?: ((Game.WIDTH - (numPeasantsPerLine - 1) * spacingX) / 2)
 
         (0 until numLines).forEach { lineIndex ->
-            val yCoordinate = Game.HEIGHT + (lineIndex * spacingY)
+            val yCoordinate = Game.HEIGHT + (lineIndex * spacingY) + 150
 
             (0 until numPeasantsPerLine).forEach { peasantIndex ->
                 val xCoordinate = startX + (peasantIndex * spacingX)
