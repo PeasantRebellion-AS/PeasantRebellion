@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
+import com.peasantrebellion.PeasantRebellion
+import com.peasantrebellion.Screen
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
@@ -11,6 +13,9 @@ import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 
 const val ENEMY_MOVEMENT_SPEED = 50f // Temporary value, can be adjusted
+
+// Once the enemies cross this line, the player loses.
+const val GAME_OVER_LINE_Y = 150f
 
 class EnemyMovementSystem : IteratingSystem(
     Family.all(
@@ -20,13 +25,12 @@ class EnemyMovementSystem : IteratingSystem(
     ).exclude(UserControlledComponent::class.java).get(),
 ) {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
-    private val enemyFamily = Family.all(BodyComponent::class.java).exclude(UserControlledComponent::class.java).get()
     private var direction = 1 // The direction of the peasant, 1 for right, -1 for left, 0 for no movement
 
     override fun update(deltaTime: Float) {
         super.update(deltaTime)
 
-        val enemies = engine.getEntitiesFor(enemyFamily)
+        val enemies = engine.getEntitiesFor(family)
         var moveDown = false
         // Check if any of the peasants hit a wall. If so, move down and change direction
         for (enemy in enemies) {
@@ -43,6 +47,13 @@ class EnemyMovementSystem : IteratingSystem(
                 val b = bodyMapper[e].body
                 b.y -= b.height / 2
             }
+        }
+
+        // Check for game over
+        if (enemies.any { bodyMapper[it].body.y < GAME_OVER_LINE_Y }) {
+            PeasantRebellion.getInstance().switchTo(
+                Screen.gameEnd(100),
+            )
         }
     }
 

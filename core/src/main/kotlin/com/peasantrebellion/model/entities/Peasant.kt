@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import ktx.assets.toInternalFile
 
@@ -19,6 +20,7 @@ fun peasant(
     difficulty: String,
     xPos: Float,
     yPos: Float,
+    fireRate: Float,
 ): Entity {
     val textures: List<Texture> =
         listOf(
@@ -36,6 +38,7 @@ fun peasant(
     val textureWidth = textures[0].width * 3f
     val bodyWidth = textureWidth * 0.4f
     val bodyHeight = textureHeight * 0.6f
+    val enemyDrawDuration = 0.8f
 
     return with(Entity()) {
         add(
@@ -64,9 +67,10 @@ fun peasant(
         add(
             AnimationComponent(
                 // Since we only have 5 textures for the peasants but 7 for the player, we need to have a longer time per texture
-                0.14f,
+                enemyDrawDuration / textures.size,
                 textures,
             ),
         )
+        add(ShooterComponent(fireRate, enemyDrawDuration))
     }
 }
