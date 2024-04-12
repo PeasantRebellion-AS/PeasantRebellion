@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import ktx.assets.toInternalFile
@@ -30,6 +31,8 @@ fun player(): Entity {
     // The texture is larger than the body should be.
     val bodyWidth = textureWidth * 0.4f
     val bodyHeight = textureHeight * 0.6f
+
+    val playerDrawDuration = 0.7f
 
     return with(Entity()) {
         add(
@@ -63,6 +66,7 @@ fun player(): Entity {
                 textures,
             ),
         )
+        add(ShooterComponent(drawDuration = playerDrawDuration))
         add(UserControlledComponent())
     }
 }

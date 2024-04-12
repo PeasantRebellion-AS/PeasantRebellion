@@ -44,7 +44,7 @@ class EnemyWaveSystem(private val engine: Engine) : EntitySystem() {
                 val xCoordinate = startX + (peasantIndex * spacingX)
                 val typeIndex = (lineIndex + peasantIndex) % peasantTypes.size
                 val type = peasantTypes[typeIndex]
-                engine.addEntity(peasant(type, xCoordinate, yCoordinate))
+                engine.addEntity(peasant(type, xCoordinate, yCoordinate, (typeIndex.toFloat()+1)/2))
             }
         }
     }

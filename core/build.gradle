@@ -9,4 +9,6 @@ dependencies {
   api "io.github.libktx:ktx-assets:$ktxVersion"
   api "io.github.libktx:ktx-graphics:$ktxVersion"
   api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+  api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
 }

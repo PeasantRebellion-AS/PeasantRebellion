@@ -22,13 +22,15 @@ class AnimationSystem : IteratingSystem(
         deltaTime: Float,
     ) {
         val animationComponent = animationMapper[entity]
-        val textureComponent = textureMapper[entity]
-        animationComponent.timeElapsed += deltaTime
+        if (!animationComponent.isIdle) {
+            animationComponent.timeElapsed += deltaTime
+        }
 
         val timeElapsed = animationComponent.timeElapsed
         val timePerTexture = animationComponent.timePerTexture
         val textures: Int = animationComponent.textures.size
         // Switch texture based on the elapsed time
+        val textureComponent = textureMapper[entity]
         textureComponent.texture =
             animationComponent.textures[
                 (timeElapsed / timePerTexture).toInt() % textures,

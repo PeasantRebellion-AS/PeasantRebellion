@@ -7,11 +7,17 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.ashley.utils.ImmutableArray
+import com.peasantrebellion.SCREEN_HEIGHT
+import com.peasantrebellion.SCREEN_WIDTH
+import com.peasantrebellion.model.entities.peasant
 import com.peasantrebellion.model.entities.player
 import com.peasantrebellion.model.systems.AnimationSystem
+import com.peasantrebellion.model.systems.CollisionSystem
 import com.peasantrebellion.model.systems.EnemyMovementSystem
+import com.peasantrebellion.model.systems.EnemyShootingSystem
 import com.peasantrebellion.model.systems.PlayerControlSystem
-import com.peasantrebellion.model.systems.ShootingSystem
+import com.peasantrebellion.model.systems.PlayerShootingSystem
+import com.peasantrebellion.model.systems.ProjectileMovementSystem
 
 class Game {
     private val engine: PooledEngine = PooledEngine()
@@ -25,9 +31,12 @@ class Game {
         // Systems
         engine.addSystem(PlayerControlSystem())
         engine.addSystem(EnemyMovementSystem())
-        engine.addSystem(ShootingSystem())
+        engine.addSystem(PlayerShootingSystem())
+        engine.addSystem(EnemyShootingSystem())
         engine.addSystem(AnimationSystem())
         engine.addSystem(EnemyWaveSystem(engine))
+        engine.addSystem(ProjectileMovementSystem())
+        engine.addSystem(CollisionSystem())
         // Entities
         engine.addEntity(player())
 
@@ -39,7 +48,7 @@ class Game {
     }
 
     companion object World {
-        const val WIDTH = 720f
-        const val HEIGHT = 1280f
+        const val WIDTH = SCREEN_WIDTH
+        const val HEIGHT = SCREEN_HEIGHT
     }
 }
