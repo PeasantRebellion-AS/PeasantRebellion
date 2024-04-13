@@ -25,6 +25,7 @@ class GameView(
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val shapeRenderer = ShapeRenderer()
+    private val iconBackground = Texture("game_icon_background.png")
     private val emptyHeart = Texture("hearts/heart_empty.png")
     private val fullHeart = Texture("hearts/heart_full.png")
     private val coin = Texture("copper_coin.png")
@@ -75,14 +76,15 @@ class GameView(
             }
 
             // Hearts (HP)
+            it.draw(iconBackground, Game.WIDTH - 260f, Game.HEIGHT - 109f)
             game.entities(
                 UserControlledComponent::class.java,
                 HealthComponent::class.java,
             ).firstOrNull()?.getComponent(HealthComponent::class.java)?.hp?.let { fullHearts ->
                 // Draw hearts from right to left based on the player's HP
                 val emptyHearts = MAX_PLAYER_HEALTH - fullHearts
-                var heartX = Game.WIDTH - 100f
-                val heartY = Game.HEIGHT - 90f
+                var heartX = Game.WIDTH - 110f
+                val heartY = Game.HEIGHT - 96f
                 repeat(emptyHearts) { _ ->
                     it.draw(emptyHeart, heartX, heartY)
                     heartX -= 55f
@@ -94,6 +96,7 @@ class GameView(
             }
 
             // Player coin balance
+            it.draw(iconBackground, 20f, Game.HEIGHT - 109f)
             for (player in game.entities(
                 CopperBalanceComponent::class.java,
                 UserControlledComponent::class.java,
