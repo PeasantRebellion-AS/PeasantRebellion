@@ -14,6 +14,7 @@ import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.player
 import ktx.ashley.get
+import ktx.ashley.getSystem
 
 class HealthSystem : EntitySystem() {
     private val playerFamily: Family =
@@ -65,7 +66,7 @@ class HealthSystem : EntitySystem() {
         val healthComponent = healthMapper[enemy]
         healthComponent.hp--
         if (healthComponent.hp <= 0) {
-            // TODO: give player coins
+            engine.getSystem<CopperCoinSystem>().giveCoinsToPlayer(enemy)
             engine.removeEntity(enemy)
         }
     }

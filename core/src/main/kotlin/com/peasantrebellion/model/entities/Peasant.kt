@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.CopperDropperComponent
 import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.ProjectileComponent
 import com.peasantrebellion.model.components.ShooterComponent
@@ -85,6 +86,16 @@ fun peasant(
                     "medium" -> 2
                     "hard" -> 3
                     else -> 1
+                },
+            ),
+        )
+        add(
+            CopperDropperComponent(
+                when (difficulty) {
+                    "easy" -> 1
+                    "medium" -> 2
+                    "hard" -> 3
+                    else -> 0
                 },
             ),
         )

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.CopperBalanceComponent
 import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.ProjectileComponent
 import com.peasantrebellion.model.components.ShooterComponent
@@ -74,5 +75,6 @@ fun player(onCollisionWithArrow: (player: Entity, arrow: Entity) -> Unit): Entit
         add(ShooterComponent(drawDuration = playerDrawDuration))
         add(UserControlledComponent())
         add(HealthComponent(3))
+        add(CopperBalanceComponent())
     }
 }

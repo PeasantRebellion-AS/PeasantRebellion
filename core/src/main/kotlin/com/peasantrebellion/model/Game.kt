@@ -12,6 +12,7 @@ import com.peasantrebellion.model.entities.peasant
 import com.peasantrebellion.model.entities.player
 import com.peasantrebellion.model.systems.AnimationSystem
 import com.peasantrebellion.model.systems.CollisionSystem
+import com.peasantrebellion.model.systems.CopperCoinSystem
 import com.peasantrebellion.model.systems.EnemyMovementSystem
 import com.peasantrebellion.model.systems.EnemyShootingSystem
 import com.peasantrebellion.model.systems.HealthSystem
@@ -36,6 +37,7 @@ class Game {
         engine.addSystem(AnimationSystem())
         engine.addSystem(ProjectileMovementSystem())
         engine.addSystem(CollisionSystem())
+        engine.addSystem(CopperCoinSystem())
         val healthSystem = HealthSystem()
         val onPlayerCollisionWithArrow = { player: Entity, arrow: Entity ->
             healthSystem.hitPlayerWithArrow(player, arrow)
