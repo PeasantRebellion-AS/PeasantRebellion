@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.FitViewport
-import com.badlogic.gdx.utils.viewport.Viewport
 import com.peasantrebellion.model.Game
 
 const val SCREEN_WIDTH = 720f
@@ -24,7 +23,7 @@ class PeasantRebellion : ApplicationAdapter() {
             }
     }
 
-    private lateinit var music: Music
+    lateinit var music: Music
     lateinit var viewport: FitViewport
         private set
 
@@ -45,7 +44,7 @@ class PeasantRebellion : ApplicationAdapter() {
         viewport = FitViewport(camera.viewportWidth, camera.viewportHeight, camera)
         // Initial screen
         screen = Screen.mainMenu()
-        // Music
+        // Music always starts at full volume
         music = Gdx.audio.newMusic(Gdx.files.internal("peasant_rebellion_music.mp3"))
         music.play()
         music.isLooping = true

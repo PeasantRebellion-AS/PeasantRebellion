@@ -31,7 +31,7 @@ class MainMenuView : View {
         )
 
     override fun render() {
-        clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
+        clearScreen(red = 0f, green = 0f, blue = 0f)
         batch.projectionMatrix = viewport.camera.combined
         background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         batch.use {
