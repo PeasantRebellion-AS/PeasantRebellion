@@ -44,7 +44,7 @@ class PeasantRebellion : ApplicationAdapter() {
         viewport = FitViewport(camera.viewportWidth, camera.viewportHeight, camera)
         // Initial screen
         screen = Screen.mainMenu()
-        // Music
+        // Music always starts at full volume
         music = Gdx.audio.newMusic(Gdx.files.internal("peasant_rebellion_music.mp3"))
         music.play()
         music.isLooping = true

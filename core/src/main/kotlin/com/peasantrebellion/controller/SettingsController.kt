@@ -15,13 +15,14 @@ class SettingsController(private val settingsView: SettingsView) : Controller {
             }
         }
         whenTouching { x, y ->
+            // if user input is within bounds of music slider
             if (x >= settingsView.musicSlider.x && x <= settingsView.musicSlider.x + settingsView.musicSlider.width &&
                 y >= settingsView.musicSlider.y && y <= settingsView.musicSlider.y + settingsView.musicSlider.height
             ) {
                 val newValue = (x - settingsView.musicSlider.x) / settingsView.musicSlider.width
                 // Update the slider value
                 settingsView.musicSlider.value = newValue
-                // Update the music volume accordingly
+                // Update the music volume
                 updateMusicVolume(newValue)
             }
         }

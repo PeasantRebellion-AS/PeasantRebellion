@@ -14,7 +14,7 @@ import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 
-class SettingsView() : View {
+class SettingsView : View {
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val menuFont = MenuFont()
@@ -35,11 +35,11 @@ class SettingsView() : View {
                 knob = TextureRegionDrawable(TextureRegion(musicSliderKnob))
             },
         ).apply {
-            // Set initial music volume
-            value = 0.8f
+            // Set knob position to music volume
+            value = PeasantRebellion.getInstance().music.volume
             // Set size and position
             setSize(musicSliderBackground.width.toFloat(), musicSliderBackground.height.toFloat())
-            setPosition((WIDTH - musicSliderBackground.width.toFloat()) / 2, 400f)
+            setPosition((WIDTH - musicSliderBackground.width.toFloat() - musicSliderKnob.width.toFloat()) / 2, 250f)
         }
 
     override fun render() {
@@ -55,10 +55,19 @@ class SettingsView() : View {
                 // settings title
                 font.data.setScale(6f)
                 drawCentered(it, "Settings", GameEndView.WIDTH / 2, GameEndView.HEIGHT - 200f)
+                // music title over slider
+                font.data.setScale(4f)
+                drawCentered(it, "Music", GameEndView.WIDTH / 2, musicSlider.y + 150f)
             }
 
-            // Slider
-            batch.draw(musicSliderBackground, musicSlider.x, musicSlider.y, musicSlider.width, musicSlider.height)
+            // Music slider
+            batch.draw(
+                musicSliderBackground,
+                musicSlider.x,
+                musicSlider.y,
+                musicSlider.width + musicSliderKnob.width,
+                musicSlider.height,
+            )
             batch.draw(
                 musicSliderKnob,
                 musicSlider.x + musicSlider.width * musicSlider.percent,
