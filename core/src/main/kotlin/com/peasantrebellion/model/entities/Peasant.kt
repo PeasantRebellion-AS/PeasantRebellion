@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.CopperDropperComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import ktx.assets.toInternalFile
@@ -72,5 +73,15 @@ fun peasant(
             ),
         )
         add(ShooterComponent(fireRate, enemyDrawDuration))
+        add(
+            CopperDropperComponent(
+                when (difficulty) {
+                    "easy" -> 1
+                    "medium" -> 2
+                    "hard" -> 3
+                    else -> 0
+                },
+            ),
+        )
     }
 }

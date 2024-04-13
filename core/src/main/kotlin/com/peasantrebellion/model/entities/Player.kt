@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.CopperBalanceComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
@@ -68,5 +69,6 @@ fun player(): Entity {
         )
         add(ShooterComponent(drawDuration = playerDrawDuration))
         add(UserControlledComponent())
+        add(CopperBalanceComponent())
     }
 }
