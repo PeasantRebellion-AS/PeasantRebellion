@@ -12,6 +12,7 @@ import com.peasantrebellion.model.components.CopperBalanceComponent
 import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
+import com.peasantrebellion.model.entities.MAX_PLAYER_HEALTH
 import com.peasantrebellion.view.utility.MenuFont
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -79,7 +80,7 @@ class GameView(
                 HealthComponent::class.java,
             ).firstOrNull()?.getComponent(HealthComponent::class.java)?.hp?.let { fullHearts ->
                 // Draw hearts from right to left based on the player's HP
-                val emptyHearts = 3 - fullHearts
+                val emptyHearts = MAX_PLAYER_HEALTH - fullHearts
                 var heartX = Game.WIDTH - 100f
                 val heartY = Game.HEIGHT - 90f
                 repeat(emptyHearts) { _ ->

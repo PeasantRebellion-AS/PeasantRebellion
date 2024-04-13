@@ -15,6 +15,8 @@ import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import ktx.assets.toInternalFile
 
+const val MAX_PLAYER_HEALTH = 3
+
 fun player(onCollisionWithArrow: (player: Entity, arrow: Entity) -> Unit): Entity {
     val textures: List<Texture> =
         listOf(
@@ -74,7 +76,7 @@ fun player(onCollisionWithArrow: (player: Entity, arrow: Entity) -> Unit): Entit
         )
         add(ShooterComponent(drawDuration = playerDrawDuration))
         add(UserControlledComponent())
-        add(HealthComponent(3))
+        add(HealthComponent(MAX_PLAYER_HEALTH))
         add(CopperBalanceComponent())
     }
 }

@@ -12,7 +12,6 @@ import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.ProjectileComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
-import ktx.ashley.get
 import ktx.ashley.getSystem
 
 class HealthSystem : EntitySystem() {
