@@ -15,6 +15,7 @@ import com.peasantrebellion.model.systems.CollisionSystem
 import com.peasantrebellion.model.systems.CopperCoinSystem
 import com.peasantrebellion.model.systems.EnemyMovementSystem
 import com.peasantrebellion.model.systems.EnemyShootingSystem
+import com.peasantrebellion.model.systems.HealthSystem
 import com.peasantrebellion.model.systems.PlayerControlSystem
 import com.peasantrebellion.model.systems.PlayerShootingSystem
 import com.peasantrebellion.model.systems.ProjectileMovementSystem
@@ -37,16 +38,18 @@ class Game {
         engine.addSystem(ProjectileMovementSystem())
         engine.addSystem(CollisionSystem())
         engine.addSystem(CopperCoinSystem())
+        val healthSystem = HealthSystem()
+        engine.addSystem(healthSystem)
 
         // Entities
-        engine.addEntity(player())
+        engine.addEntity(player(healthSystem::hitWithArrow))
         // For testing
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f, 0.5f))
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f - 100f, 0.5f))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f, 1f))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f - 100f, 1f))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f, 1.5f))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f - 100f, 1.5f))
+        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f, 0.5f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f - 100f, 0.5f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f, 1f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f - 100f, 1f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f, 1.5f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f - 100f, 1.5f, healthSystem::hitWithArrow))
     }
 
     fun update(deltaTime: Float) {

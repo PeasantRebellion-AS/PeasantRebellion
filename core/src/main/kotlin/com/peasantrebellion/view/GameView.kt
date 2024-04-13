@@ -9,8 +9,10 @@ import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.CopperBalanceComponent
+import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
+import com.peasantrebellion.model.entities.MAX_PLAYER_HEALTH
 import com.peasantrebellion.view.utility.MenuFont
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -23,11 +25,14 @@ class GameView(
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val shapeRenderer = ShapeRenderer()
+    private val iconBackground = Texture("game_icon_background.png")
+    private val emptyHeart = Texture("hearts/heart_empty.png")
+    private val fullHeart = Texture("hearts/heart_full.png")
+    private val coin = Texture("copper_coin.png")
     private val menuFont =
         MenuFont().also {
             it.font.data.setScale(4f)
         }
-    private val coin = Texture("copper_coin.png")
 
     override fun render() {
         clearScreen(red = 0f, green = 0f, blue = 0f)
@@ -70,7 +75,28 @@ class GameView(
                 }
             }
 
+            // Hearts (HP)
+            it.draw(iconBackground, Game.WIDTH - 260f, Game.HEIGHT - 109f)
+            game.entities(
+                UserControlledComponent::class.java,
+                HealthComponent::class.java,
+            ).firstOrNull()?.getComponent(HealthComponent::class.java)?.hp?.let { fullHearts ->
+                // Draw hearts from right to left based on the player's HP
+                val emptyHearts = MAX_PLAYER_HEALTH - fullHearts
+                var heartX = Game.WIDTH - 110f
+                val heartY = Game.HEIGHT - 96f
+                repeat(emptyHearts) { _ ->
+                    it.draw(emptyHeart, heartX, heartY)
+                    heartX -= 55f
+                }
+                repeat(fullHearts) { _ ->
+                    it.draw(fullHeart, heartX, heartY)
+                    heartX -= 55f
+                }
+            }
+
             // Player coin balance
+            it.draw(iconBackground, 20f, Game.HEIGHT - 109f)
             for (player in game.entities(
                 CopperBalanceComponent::class.java,
                 UserControlledComponent::class.java,
