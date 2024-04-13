@@ -1,6 +1,7 @@
 package com.peasantrebellion.view
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
@@ -18,6 +19,8 @@ class GameView(
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val shapeRenderer = ShapeRenderer()
+    private val emptyHeart = Texture("hearts/heart_empty.png")
+    private val fullHeart = Texture("hearts/heart_full.png")
 
     override fun render() {
         clearScreen(red = 0f, green = 0f, blue = 0f)
@@ -60,6 +63,10 @@ class GameView(
                     it.begin()
                 }
             }
+
+            it.draw(emptyHeart, Game.WIDTH - 100f, Game.HEIGHT - 90f)
+            it.draw(fullHeart, Game.WIDTH - 140f, Game.HEIGHT - 90f)
+            it.draw(fullHeart, Game.WIDTH - 180f, Game.HEIGHT - 90f)
         }
 
         viewport.camera.update()
