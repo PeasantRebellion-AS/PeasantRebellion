@@ -39,23 +39,17 @@ class Game {
         engine.addSystem(CollisionSystem())
         engine.addSystem(CopperCoinSystem())
         val healthSystem = HealthSystem()
-        val onPlayerCollisionWithArrow = { player: Entity, arrow: Entity ->
-            healthSystem.hitPlayerWithArrow(player, arrow)
-        }
-        val onEnemyCollisionWithArrow = { enemy: Entity, arrow: Entity ->
-            healthSystem.hitEnemyWithArrow(enemy, arrow)
-        }
         engine.addSystem(healthSystem)
 
         // Entities
-        engine.addEntity(player(onPlayerCollisionWithArrow))
+        engine.addEntity(player(healthSystem::hitWithArrow))
         // For testing
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f, 0.5f, onEnemyCollisionWithArrow))
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f - 100f, 0.5f, onEnemyCollisionWithArrow))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f, 1f, onEnemyCollisionWithArrow))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f - 100f, 1f, onEnemyCollisionWithArrow))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f, 1.5f, onEnemyCollisionWithArrow))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f - 100f, 1.5f, onEnemyCollisionWithArrow))
+        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f, 0.5f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f - 100f, 0.5f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f, 1f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f - 100f, 1f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f, 1.5f, healthSystem::hitWithArrow))
+        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f - 100f, 1.5f, healthSystem::hitWithArrow))
     }
 
     fun update(deltaTime: Float) {

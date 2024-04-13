@@ -12,7 +12,6 @@ import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.ProjectileComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
-import com.peasantrebellion.model.entities.player
 import ktx.ashley.get
 import ktx.ashley.getSystem
 
@@ -40,34 +39,40 @@ class HealthSystem : EntitySystem() {
     private val healthMapper = ComponentMapper.getFor(HealthComponent::class.java)
     private val projectileMapper = ComponentMapper.getFor(ProjectileComponent::class.java)
 
-    fun hitPlayerWithArrow(
-        player: Entity,
-        arrow: Entity,
+    private fun takeDamage(
+        entity: Entity,
+        onDeath: (Entity) -> Unit,
     ) {
-        if (!arrowFamily.matches(arrow)) return
-        if (projectileMapper[arrow].yVelocity > 0) return
-        if (!playerFamily.matches(player)) return
-        engine.removeEntity(arrow)
-        val healthComponent = healthMapper[player]
+        val healthComponent = healthMapper[entity]
         healthComponent.hp--
         if (healthComponent.hp <= 0) {
-            PeasantRebellion.getInstance().switchTo(Screen.gameEnd(1000))
+            onDeath(entity)
         }
     }
 
-    fun hitEnemyWithArrow(
-        enemy: Entity,
+    private fun killEnemy(enemy: Entity) {
+        engine.getSystem<CopperCoinSystem>().giveCoinsToPlayer(enemy)
+        engine.removeEntity(enemy)
+    }
+
+    private fun killPlayer() {
+        PeasantRebellion.getInstance().switchTo(Screen.gameEnd(1000))
+    }
+
+    fun hitWithArrow(
+        target: Entity,
         arrow: Entity,
     ) {
-        if (!enemyFamily.matches(enemy)) return
-        if (projectileMapper[arrow].yVelocity < 0) return
         if (!arrowFamily.matches(arrow)) return
-        engine.removeEntity(arrow)
-        val healthComponent = healthMapper[enemy]
-        healthComponent.hp--
-        if (healthComponent.hp <= 0) {
-            engine.getSystem<CopperCoinSystem>().giveCoinsToPlayer(enemy)
-            engine.removeEntity(enemy)
+        val enemyWasHit = enemyFamily.matches(target) && projectileMapper[arrow].yVelocity > 0
+        val playerWasHit = playerFamily.matches(target) && projectileMapper[arrow].yVelocity < 0
+        if (!enemyWasHit && !playerWasHit) return
+
+        if (enemyWasHit) {
+            takeDamage(target, this::killEnemy)
+        } else {
+            takeDamage(target) { killPlayer() }
         }
+        engine.removeEntity(arrow)
     }
 }
