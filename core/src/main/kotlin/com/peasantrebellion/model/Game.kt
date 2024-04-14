@@ -11,14 +11,15 @@ import com.peasantrebellion.SCREEN_WIDTH
 import com.peasantrebellion.model.entities.peasant
 import com.peasantrebellion.model.entities.player
 import com.peasantrebellion.model.systems.AnimationSystem
+import com.peasantrebellion.model.systems.CoinSystem
 import com.peasantrebellion.model.systems.CollisionSystem
-import com.peasantrebellion.model.systems.CopperCoinSystem
 import com.peasantrebellion.model.systems.EnemyMovementSystem
 import com.peasantrebellion.model.systems.EnemyShootingSystem
 import com.peasantrebellion.model.systems.HealthSystem
 import com.peasantrebellion.model.systems.PlayerControlSystem
 import com.peasantrebellion.model.systems.PlayerShootingSystem
 import com.peasantrebellion.model.systems.ProjectileMovementSystem
+import com.peasantrebellion.model.systems.ScoreSystem
 
 class Game {
     private val engine: PooledEngine = PooledEngine()
@@ -37,7 +38,8 @@ class Game {
         engine.addSystem(AnimationSystem())
         engine.addSystem(ProjectileMovementSystem())
         engine.addSystem(CollisionSystem())
-        engine.addSystem(CopperCoinSystem())
+        engine.addSystem(CoinSystem())
+        engine.addSystem(ScoreSystem())
         val healthSystem = HealthSystem()
         engine.addSystem(healthSystem)
 
