@@ -4,6 +4,10 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.Timer
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
@@ -18,6 +22,11 @@ class EnemyWaveSystem(private val engine: Engine) : EntitySystem() {
     private val spacingX = 100f
     private val spacingY = 100f
     private val peasantTypes = arrayOf("easy", "medium", "hard")
+    private var waveNumber = 0
+
+    fun getCurrentWaveNumber(): Int {
+        return waveNumber
+    }
 
     init {
         Timer.schedule(object : Timer.Task() {
@@ -28,6 +37,8 @@ class EnemyWaveSystem(private val engine: Engine) : EntitySystem() {
     }
 
     private fun spawnWave() {
+        waveNumber++
+
         val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
 
         val leftmostPeasant = engine.getEntitiesFor(Family.all(BodyComponent::class.java)

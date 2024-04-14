@@ -45,7 +45,7 @@ class EnemyShootingSystem : IteratingSystem(
         shooterMapper[entity].timeSinceLastDraw += deltaTime
         val timeSinceLastDraw = shooterMapper[entity].timeSinceLastDraw
 
-        val tolerance = 0.1f
+        val tolerance = body.width
 
         val isBlocked = enemies.any { otherEnemy ->
             val otherEnemyBody = bodyMapper[otherEnemy].body
