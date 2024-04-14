@@ -53,5 +53,6 @@ class Game {
     companion object World {
         const val WIDTH = SCREEN_WIDTH
         const val HEIGHT = SCREEN_HEIGHT
+        var paused = false
     }
 }

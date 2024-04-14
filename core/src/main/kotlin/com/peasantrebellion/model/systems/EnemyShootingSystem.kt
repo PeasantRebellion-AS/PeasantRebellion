@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
+import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.ShooterComponent
@@ -41,6 +42,9 @@ class EnemyShootingSystem : IteratingSystem(
         val enemies = engine.getEntitiesFor(family)
         val body = bodyMapper[entity].body
 
+        if (Game.paused) {
+            return
+        }
         shooterMapper[entity].timeSinceLastDraw += deltaTime
         val timeSinceLastDraw = shooterMapper[entity].timeSinceLastDraw
 

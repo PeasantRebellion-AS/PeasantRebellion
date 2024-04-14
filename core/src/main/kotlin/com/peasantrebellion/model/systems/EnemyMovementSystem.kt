@@ -28,6 +28,10 @@ class EnemyMovementSystem : IteratingSystem(
     private var direction = 1 // The direction of the peasant, 1 for right, -1 for left, 0 for no movement
 
     override fun update(deltaTime: Float) {
+        if (Game.paused) {
+            return
+        }
+
         super.update(deltaTime)
 
         val enemies = engine.getEntitiesFor(family)

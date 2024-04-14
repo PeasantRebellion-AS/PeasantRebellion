@@ -24,6 +24,10 @@ class PlayerControlSystem : EntitySystem() {
         xTarget: Float,
         deltaTime: Float,
     ) {
+        if (Game.paused) {
+            return
+        }
+
         val players = engine.getEntitiesFor(playerFamily)
         // There won't be more than one player, but there might be zero.
         for (player in players) {

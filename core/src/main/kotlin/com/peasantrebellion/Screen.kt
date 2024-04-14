@@ -26,9 +26,10 @@ class Screen private constructor(
     companion object {
         fun game(): Screen {
             val game = Game()
+            val gameView = GameView(game)
             return Screen(
-                GameController(game),
-                GameView(game),
+                GameController(game, gameView),
+                gameView,
             )
         }
 
