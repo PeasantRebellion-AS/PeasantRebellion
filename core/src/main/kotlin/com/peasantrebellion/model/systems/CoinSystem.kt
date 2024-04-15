@@ -10,7 +10,7 @@ import kotlin.math.min
 const val MAX_COIN_BALANCE = 999
 
 class CoinSystem : EntitySystem() {
-    var balance = 0
+    var balance = 999
 
     fun increaseBalance(enemy: Entity) {
         // Exits if enemy doesn't have the coin dropper component.

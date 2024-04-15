@@ -195,58 +195,70 @@ class GameView(
                     if (tally != 1) { // Only draw coin next to upgrade buttons
                         it.draw(
                             coin,
-                            button.x + 350f,
+                            button.x + 225f,
                             button.y + button.height / 2 - coin.height / 2,
                         )
                     }
                 }
             }
         }
-        // Draws prices with placeholder values
+        // Draws prices
         batch.begin()
         if (shopVisible) {
             val upgradeSystem = game.system(UpgradeSystem::class.java)
             val upgradePrices = upgradeSystem.upgradePrices
-            val upgradesList =
-                listOf(
-                    Triple(
-                        upgradeSystem.upgrades::hasDoubleShot,
-                        upgradePrices.doubleShotPrice,
-                        Game.HEIGHT / 2 + 175f,
-                    ),
-                    Triple(
-                        upgradeSystem.upgrades::hasTripleShot,
-                        upgradePrices.tripleShotPrice,
-                        Game.HEIGHT / 2 + 75f,
-                    ),
-                    Triple(
-                        upgradeSystem.upgrades::hasDoubleDamage,
-                        upgradePrices.doubleDamagePrice,
-                        Game.HEIGHT / 2 - 25f,
-                    ),
-                    Triple(
-                        upgradeSystem.upgrades::hasTripleDamage,
-                        upgradePrices.tripleDamagePrice,
-                        Game.HEIGHT / 2 - 125f,
-                    ),
-                    Triple(
-                        upgradeSystem.upgrades::hasPiercingShots,
-                        upgradePrices.piercingShotsPrice,
-                        Game.HEIGHT / 2 - 225f,
-                    ),
-                )
-
             val font = scoreFont.font
-            for ((upgrade, price, position) in upgradesList) {
-                font.color =
-                    if (upgrade.invoke()) Color.DARK_GRAY else Color.BLACK // Gray out purchased upgrades
-                font.draw(
-                    batch,
-                    price.toString(),
-                    Game.WIDTH / 2 + 25f,
-                    position + coin.height / 2 - 5f,
-                )
+
+            // This is awful, but I don't want to spend time changing it
+            if (upgradeSystem.upgrades.hasDoubleShot || upgradeSystem.upgrades.hasTripleShot) {
+                font.color = Color.DARK_GRAY
             }
+            font.draw(
+                batch,
+                upgradePrices.doubleShotPrice.toString(),
+                Game.WIDTH / 2 + 75f,
+                Game.HEIGHT / 2 + 175f + coin.height / 2 - 5f,
+            )
+            font.color = Color.BLACK
+            if (upgradeSystem.upgrades.hasTripleShot) {
+                font.color = Color.DARK_GRAY
+            }
+            font.draw(
+                batch,
+                upgradePrices.tripleShotPrice.toString(),
+                Game.WIDTH / 2 + 75f,
+                Game.HEIGHT / 2 + 75f + coin.height / 2 - 5f,
+            )
+            font.color = Color.BLACK
+            if (upgradeSystem.upgrades.hasDoubleDamage || upgradeSystem.upgrades.hasTripleDamage) {
+                font.color = Color.DARK_GRAY
+            }
+            font.draw(
+                batch,
+                upgradePrices.doubleDamagePrice.toString(),
+                Game.WIDTH / 2 + 75f,
+                Game.HEIGHT / 2 - 25f + coin.height / 2 - 5f,
+            )
+            font.color = Color.BLACK
+            if (upgradeSystem.upgrades.hasTripleDamage) {
+                font.color = Color.DARK_GRAY
+            }
+            font.draw(
+                batch,
+                upgradePrices.tripleDamagePrice.toString(),
+                Game.WIDTH / 2 + 75f,
+                Game.HEIGHT / 2 - 125f + coin.height / 2 - 5f,
+            )
+            font.color = Color.BLACK
+            if (upgradeSystem.upgrades.hasPiercingShots) {
+                font.color = Color.DARK_GRAY
+            }
+            font.draw(
+                batch,
+                upgradePrices.piercingShotsPrice.toString(),
+                Game.WIDTH / 2 + 75f,
+                Game.HEIGHT / 2 - 225f + coin.height / 2 - 5f,
+            )
             font.color = Color.BLACK
         }
         batch.end()

@@ -26,7 +26,8 @@ class UpgradeSystem : EntitySystem() {
         val coinSystem = engine.getSystem(CoinSystem::class.java)
         when (id) {
             1 -> {
-                if (!upgrades.hasDoubleShot) {
+                if (!(upgrades.hasDoubleShot || upgrades.hasTripleShot)) {
+                    // Shouldn't be able to buy double shot when triple shot is active
                     if (!coinSystem.decreaseBalance(upgradePrices.doubleShotPrice)) {
                         return
                     }
@@ -44,7 +45,7 @@ class UpgradeSystem : EntitySystem() {
             }
 
             3 -> {
-                if (!upgrades.hasDoubleDamage) {
+                if (!(upgrades.hasDoubleDamage || upgrades.hasTripleDamage)) {
                     if (!coinSystem.decreaseBalance(upgradePrices.doubleDamagePrice)) {
                         return
                     }
