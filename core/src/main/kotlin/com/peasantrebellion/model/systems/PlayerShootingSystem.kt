@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
+import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.ShooterComponent
@@ -32,6 +33,9 @@ class PlayerShootingSystem : IteratingSystem(
         entity: Entity,
         deltaTime: Float,
     ) {
+        if (Game.paused) {
+            return
+        }
         val timeSinceLastDraw = shooterMapper[entity].apply { timeSinceLastDraw += deltaTime }.timeSinceLastDraw
         animationMapper[entity].isIdle = false
         if (timeSinceLastDraw >= shooterMapper[entity].drawDuration) {

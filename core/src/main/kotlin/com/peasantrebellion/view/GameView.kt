@@ -15,6 +15,7 @@ import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.MAX_PLAYER_HEALTH
 import com.peasantrebellion.model.systems.CoinSystem
 import com.peasantrebellion.model.systems.ScoreSystem
+import com.peasantrebellion.view.utility.Button
 import com.peasantrebellion.view.utility.MenuFont
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -27,10 +28,24 @@ class GameView(
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val shapeRenderer = ShapeRenderer()
+
+    private val background = Texture("menu/game_background.png")
+    private val shop = Texture("menu/upgrade_shop_icon.png")
+    private val sideMenu = Texture("menu/side_menu.png")
+    private val settings = Texture("menu/settings_icon.png")
+    private val shopMenu = Texture("menu/shop_menu.png")
+    private val doubleShot = Texture("menu/double_shot_icon.png")
+    private val tripleShot = Texture("menu/triple_shot_icon.png")
+    private val doubleDamage = Texture("menu/double_damage_icon.png")
+    private val tripleDamage = Texture("menu/triple_damage_icon.png")
+    private val piercingShot = Texture("menu/piercing_shot_icon.png")
+    private val backButton = Texture("menu/back_button_small.png")
+
     private val iconBackground = Texture("game_icon_background.png")
     private val emptyHeart = Texture("hearts/heart_empty.png")
     private val fullHeart = Texture("hearts/heart_full.png")
     private val coin = Texture("copper_coin.png")
+
     private val menuFont =
         MenuFont().also {
             it.font.data.setScale(4f)
@@ -40,20 +55,33 @@ class GameView(
             it.font.data.setScale(3f)
         }
 
+    var shopVisible = false
+    val sideMenuButtons =
+        listOf(
+            // Open shop & settings buttons
+            Button(shop, Game.WIDTH - shop.width - 7f, Game.HEIGHT / 2 - shop.height / 2 + 55f),
+            Button(settings, Game.WIDTH - settings.width - 7f, Game.HEIGHT / 2 - settings.height / 2 - 55f),
+        )
+    val shopButtons =
+        listOf(
+            // Upgrade shop buttons
+            Button(backButton, Game.WIDTH / 2 - 300f, Game.HEIGHT / 2 + shopMenu.height / 2 - 130f),
+            Button(doubleShot, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 + 175f),
+            Button(tripleShot, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 + 75),
+            Button(doubleDamage, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 25f),
+            Button(tripleDamage, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 125f),
+            Button(piercingShot, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 225f),
+        )
+
     override fun render() {
         clearScreen(red = 0f, green = 0f, blue = 0f)
-
-        // Temp background
         shapeRenderer.projectionMatrix = viewport.camera.combined
-        shapeRenderer.use(ShapeRenderer.ShapeType.Filled) {
-            it.color = Color.WHITE
-            it.rect(0f, 0f, Game.WIDTH, Game.HEIGHT)
-        }
-
         batch.projectionMatrix = viewport.camera.combined
         batch.use {
             // Render entities ordered by y coordinate so that the furthest-down entities are
             // above the ones higher up.
+            it.draw(background, 0f, 0f)
+
             val entitiesToRender =
                 game.entities(
                     TextureComponent::class.java,
@@ -80,6 +108,10 @@ class GameView(
                     it.begin()
                 }
             }
+            // Top bar and side menu
+            it.draw(sideMenu, Game.WIDTH - sideMenu.width, Game.HEIGHT / 2 - sideMenu.height / 2)
+            it.draw(shop, Game.WIDTH - shop.width - 7f, Game.HEIGHT / 2 - shop.height / 2 + 55f)
+            it.draw(settings, Game.WIDTH - settings.width - 7f, Game.HEIGHT / 2 - settings.height / 2 - 55f)
 
             // Hearts (HP)
             it.draw(iconBackground, Game.WIDTH - 260f, Game.HEIGHT - 109f)
@@ -132,8 +164,56 @@ class GameView(
                 Game.WIDTH - 20f - textWidth,
                 50f,
             )
-        }
 
+            // In-game shop menu
+            if (shopVisible) {
+                it.draw(shopMenu, Game.WIDTH / 2 - shopMenu.width / 2, Game.HEIGHT / 2 - shopMenu.height / 2)
+                var tally = 0
+                for (button in shopButtons) {
+                    tally++
+                    it.draw(button.texture, button.x, button.y)
+                    if (tally != 1) { // Only draw coin next to upgrade buttons
+                        it.draw(coin, button.x + 350f, button.y + button.height / 2 - coin.height / 2)
+                    }
+                }
+            }
+        }
+        // Draws prices with placeholder values
+        batch.begin()
+        if (shopVisible) {
+            val font = scoreFont.font
+            font.draw(
+                batch,
+                "50",
+                Game.WIDTH / 2 + 60f,
+                Game.HEIGHT / 2 + 175f + coin.height / 2 - 5f,
+            )
+            font.draw(
+                batch,
+                "100",
+                Game.WIDTH / 2 + 25f,
+                Game.HEIGHT / 2 + 75f + coin.height / 2 - 5f,
+            )
+            font.draw(
+                batch,
+                "150",
+                Game.WIDTH / 2 + 25f,
+                Game.HEIGHT / 2 - 25f + coin.height / 2 - 5f,
+            )
+            font.draw(
+                batch,
+                "200",
+                Game.WIDTH / 2 + 25f,
+                Game.HEIGHT / 2 - 125f + coin.height / 2 - 5f,
+            )
+            font.draw(
+                batch,
+                "250",
+                Game.WIDTH / 2 + 25f,
+                Game.HEIGHT / 2 - 225f + coin.height / 2 - 5f,
+            )
+        }
+        batch.end()
         viewport.camera.update()
     }
 
@@ -144,8 +224,18 @@ class GameView(
             val texture = entity.getComponent(TextureComponent::class.java).texture
             texture.dispose()
         }
-        batch.disposeSafely()
+        for (button in shopButtons) {
+            button.texture.disposeSafely()
+        }
+        for (button in sideMenuButtons) {
+            button.texture.disposeSafely()
+        }
+        background.disposeSafely()
         menuFont.disposeSafely()
+        sideMenu.disposeSafely()
+        shopMenu.disposeSafely()
+        coin.disposeSafely()
+        batch.disposeSafely()
     }
 }
 
