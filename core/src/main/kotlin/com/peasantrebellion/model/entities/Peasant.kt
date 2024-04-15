@@ -9,9 +9,12 @@ import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.CopperDropperComponent
 import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.ProjectileComponent
+import com.peasantrebellion.model.components.ScoreValueComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import ktx.assets.toInternalFile
+
+const val DEFAULT_SCORE = 5
 
 /**
  * A peasant entity.
@@ -97,6 +100,16 @@ fun peasant(
                     "medium" -> 2
                     "hard" -> 3
                     else -> 0
+                },
+            ),
+        )
+        add(
+            ScoreValueComponent(
+                when (difficulty) {
+                    "easy" -> 1 * DEFAULT_SCORE
+                    "medium" -> 2 * DEFAULT_SCORE
+                    "hard" -> 3 * DEFAULT_SCORE
+                    else -> 0 * DEFAULT_SCORE
                 },
             ),
         )

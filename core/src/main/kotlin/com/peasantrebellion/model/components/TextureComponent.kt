@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle
 class TextureComponent(
     var texture: Texture,
     val bodyToTextureRectangle: (Rectangle) -> Rectangle = { it },
-    val displayDebugBodyOutline: Boolean = true,
+    val displayDebugBodyOutline: Boolean = false,
 ) : Component {
     var rotation = 0f
 }

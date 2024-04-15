@@ -4,11 +4,13 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
+import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.arrow
+import kotlin.math.abs
 import kotlin.random.Random
 
 class EnemyShootingSystem : IteratingSystem(
@@ -41,15 +43,20 @@ class EnemyShootingSystem : IteratingSystem(
         val enemies = engine.getEntitiesFor(family)
         val body = bodyMapper[entity].body
 
+        if (Game.paused) {
+            return
+        }
         shooterMapper[entity].timeSinceLastDraw += deltaTime
         val timeSinceLastDraw = shooterMapper[entity].timeSinceLastDraw
 
-        val isBlocked =
-            enemies.any { otherEnemy ->
-                val otherEnemyBody = bodyMapper[otherEnemy].body
+        val tolerance = body.width
 
-                otherEnemyBody.x == body.x && otherEnemyBody.y < body.y
-            }
+        val isBlocked = enemies.any { otherEnemy ->
+            val otherEnemyBody = bodyMapper[otherEnemy].body
+
+            abs(otherEnemyBody.x - body.x) < tolerance && otherEnemyBody.y < body.y
+        }
+
         val isIdle = animationMapper[entity].isIdle
         val drawTime = shooterMapper[entity].drawDuration
         if (!isBlocked && timeSinceLastDraw >= drawTime) {

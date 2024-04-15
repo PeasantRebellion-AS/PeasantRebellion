@@ -12,11 +12,12 @@ import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
+import ktx.ashley.getSystem
 
 const val ENEMY_MOVEMENT_SPEED = 50f // Temporary value, can be adjusted
 
 // Once the enemies cross this line, the player loses.
-const val GAME_OVER_LINE_Y = 150f
+const val GAME_OVER_LINE_Y = 200f
 
 class EnemyMovementSystem : IteratingSystem(
     Family.all(
@@ -32,6 +33,10 @@ class EnemyMovementSystem : IteratingSystem(
         1 // The direction of the peasant, 1 for right, -1 for left, 0 for no movement
 
     override fun update(deltaTime: Float) {
+        if (Game.paused) {
+            return
+        }
+
         super.update(deltaTime)
 
         val enemies = engine.getEntitiesFor(family)
@@ -56,7 +61,9 @@ class EnemyMovementSystem : IteratingSystem(
         // Check for game over
         if (enemies.any { bodyMapper[it].body.y < GAME_OVER_LINE_Y }) {
             PeasantRebellion.getInstance().switchTo(
-                Screen.gameEnd(100),
+                Screen.gameEnd(
+                    engine.getSystem<ScoreSystem>().score,
+                ),
             )
         }
     }

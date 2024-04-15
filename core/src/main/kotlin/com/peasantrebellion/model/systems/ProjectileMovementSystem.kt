@@ -28,6 +28,9 @@ class ProjectileMovementSystem : IteratingSystem(
         val body = bodyMapper[entity].body
         val xVelocity = projectileMapper[entity].xVelocity
         val yVelocity = projectileMapper[entity].yVelocity
+        if (Game.paused) {
+            return
+        }
         body.y += yVelocity * deltaTime
         body.x += xVelocity * deltaTime
 
