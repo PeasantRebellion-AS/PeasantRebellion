@@ -9,6 +9,7 @@ import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.arrow
+import kotlin.math.abs
 import kotlin.random.Random
 
 class EnemyShootingSystem : IteratingSystem(
@@ -44,12 +45,14 @@ class EnemyShootingSystem : IteratingSystem(
         shooterMapper[entity].timeSinceLastDraw += deltaTime
         val timeSinceLastDraw = shooterMapper[entity].timeSinceLastDraw
 
-        val isBlocked =
-            enemies.any { otherEnemy ->
-                val otherEnemyBody = bodyMapper[otherEnemy].body
+        val tolerance = body.width
 
-                otherEnemyBody.x == body.x && otherEnemyBody.y < body.y
-            }
+        val isBlocked = enemies.any { otherEnemy ->
+            val otherEnemyBody = bodyMapper[otherEnemy].body
+
+            abs(otherEnemyBody.x - body.x) < tolerance && otherEnemyBody.y < body.y
+        }
+
         val isIdle = animationMapper[entity].isIdle
         val drawTime = shooterMapper[entity].drawDuration
         if (!isBlocked && timeSinceLastDraw >= drawTime) {

@@ -1,5 +1,6 @@
 package com.peasantrebellion.model
 
+import com.peasantrebellion.model.systems.EnemyWaveSystem
 import com.badlogic.ashley.core.Component
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
@@ -36,6 +37,7 @@ class Game {
         engine.addSystem(PlayerShootingSystem())
         engine.addSystem(EnemyShootingSystem())
         engine.addSystem(AnimationSystem())
+        engine.addSystem(EnemyWaveSystem())
         engine.addSystem(ProjectileMovementSystem())
         engine.addSystem(CollisionSystem())
         engine.addSystem(CoinSystem())
@@ -45,13 +47,6 @@ class Game {
 
         // Entities
         engine.addEntity(player(healthSystem::hitWithArrow))
-        // For testing
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f, 0.5f, healthSystem::hitWithArrow))
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f - 100f, 0.5f, healthSystem::hitWithArrow))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f, 1f, healthSystem::hitWithArrow))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f - 100f, 1f, healthSystem::hitWithArrow))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f, 1.5f, healthSystem::hitWithArrow))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f - 100f, 1.5f, healthSystem::hitWithArrow))
     }
 
     fun update(deltaTime: Float) {
