@@ -28,24 +28,24 @@ class GameView(
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val shapeRenderer = ShapeRenderer()
+
     private val background = Texture("menu/game_background.png")
     private val shop = Texture("menu/upgrade_shop_icon.png")
     private val sideMenu = Texture("menu/side_menu.png")
     private val settings = Texture("menu/settings_icon.png")
-    private val topBar = Texture("menu/top_bar.png")
     private val shopMenu = Texture("menu/shop_menu.png")
     private val doubleShot = Texture("menu/double_shot_icon.png")
     private val tripleShot = Texture("menu/triple_shot_icon.png")
     private val doubleDamage = Texture("menu/double_damage_icon.png")
     private val tripleDamage = Texture("menu/triple_damage_icon.png")
     private val piercingShot = Texture("menu/piercing_shot_icon.png")
-    private val reloadTime = Texture("menu/reload_icon.png")
     private val backButton = Texture("menu/back_button_small.png")
-    private val placeholderCoin = Texture("menu/placeholder_copper_coin.png")
+
     private val iconBackground = Texture("game_icon_background.png")
     private val emptyHeart = Texture("hearts/heart_empty.png")
     private val fullHeart = Texture("hearts/heart_full.png")
     private val coin = Texture("copper_coin.png")
+
     private val menuFont =
         MenuFont().also {
             it.font.data.setScale(4f)
@@ -71,7 +71,6 @@ class GameView(
             Button(doubleDamage, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 25f),
             Button(tripleDamage, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 125f),
             Button(piercingShot, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 225f),
-            Button(reloadTime, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 325),
         )
 
     override fun render() {
@@ -113,7 +112,6 @@ class GameView(
             it.draw(sideMenu, Game.WIDTH - sideMenu.width, Game.HEIGHT / 2 - sideMenu.height / 2)
             it.draw(shop, Game.WIDTH - shop.width - 7f, Game.HEIGHT / 2 - shop.height / 2 + 55f)
             it.draw(settings, Game.WIDTH - settings.width - 7f, Game.HEIGHT / 2 - settings.height / 2 - 55f)
-            // it.draw(topBar, 0f, Game.HEIGHT - topBar.height)
 
             // Hearts (HP)
             it.draw(iconBackground, Game.WIDTH - 260f, Game.HEIGHT - 109f)
@@ -175,7 +173,7 @@ class GameView(
                     tally++
                     it.draw(button.texture, button.x, button.y)
                     if (tally != 1) { // Only draw coin next to upgrade buttons
-                        it.draw(placeholderCoin, button.x + 350f, button.y + button.height / 2 - placeholderCoin.height / 2)
+                        it.draw(coin, button.x + 350f, button.y + button.height / 2 - coin.height / 2)
                     }
                 }
             }
@@ -188,37 +186,31 @@ class GameView(
                 batch,
                 "50",
                 Game.WIDTH / 2 + 60f,
-                Game.HEIGHT / 2 + 175f + placeholderCoin.height / 2 - 5f,
+                Game.HEIGHT / 2 + 175f + coin.height / 2 - 5f,
             )
             font.draw(
                 batch,
                 "100",
                 Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 + 75f + placeholderCoin.height / 2 - 5f,
+                Game.HEIGHT / 2 + 75f + coin.height / 2 - 5f,
             )
             font.draw(
                 batch,
                 "150",
                 Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 - 25f + placeholderCoin.height / 2 - 5f,
+                Game.HEIGHT / 2 - 25f + coin.height / 2 - 5f,
             )
             font.draw(
                 batch,
                 "200",
                 Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 - 125f + placeholderCoin.height / 2 - 5f,
+                Game.HEIGHT / 2 - 125f + coin.height / 2 - 5f,
             )
             font.draw(
                 batch,
                 "250",
                 Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 - 225f + placeholderCoin.height / 2 - 5f,
-            )
-            font.draw(
-                batch,
-                "300",
-                Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 - 325f + placeholderCoin.height / 2 - 5f,
+                Game.HEIGHT / 2 - 225f + coin.height / 2 - 5f,
             )
         }
         batch.end()
@@ -242,8 +234,7 @@ class GameView(
         menuFont.disposeSafely()
         sideMenu.disposeSafely()
         shopMenu.disposeSafely()
-        topBar.disposeSafely()
-        placeholderCoin.disposeSafely()
+        coin.disposeSafely()
         batch.disposeSafely()
     }
 }

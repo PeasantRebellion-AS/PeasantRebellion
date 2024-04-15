@@ -20,22 +20,33 @@ class EnemyWaveSystem : EntitySystem() {
     private val peasantTypes = arrayOf("easy", "medium", "hard")
 
     init {
-        Timer.schedule(object : Timer.Task() {
-            override fun run() {
-                spawnWave()
-            }
-        }, initialDelay, waveInterval)
+        Timer.schedule(
+            object : Timer.Task() {
+                override fun run() {
+                    if (Game.paused) {
+                        return
+                    }
+                    spawnWave()
+                }
+            },
+            initialDelay,
+            waveInterval,
+        )
     }
 
     private fun spawnWave() {
         val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
 
-        val leftmostPeasant = engine.getEntitiesFor(Family.all(BodyComponent::class.java)
-            .exclude(UserControlledComponent::class.java).get())
-            .minByOrNull { bodyMapper[it].body.x }
+        val leftmostPeasant =
+            engine.getEntitiesFor(
+                Family.all(BodyComponent::class.java)
+                    .exclude(UserControlledComponent::class.java).get(),
+            )
+                .minByOrNull { bodyMapper[it].body.x }
 
-        val startX = leftmostPeasant?.let { bodyMapper[it].body.x }
-            ?: ((Game.WIDTH - (numPeasantsPerLine - 1) * spacingX) / 2)
+        val startX =
+            leftmostPeasant?.let { bodyMapper[it].body.x }
+                ?: ((Game.WIDTH - (numPeasantsPerLine - 1) * spacingX) / 2)
 
         (0 until numLines).forEach { lineIndex ->
             val yCoordinate = Game.HEIGHT + (lineIndex * spacingY) + 150
@@ -45,7 +56,7 @@ class EnemyWaveSystem : EntitySystem() {
                 val typeIndex = (lineIndex + peasantIndex) % peasantTypes.size
                 val type = peasantTypes[typeIndex]
                 val healthSystem = engine.getSystem<HealthSystem>()
-                engine.addEntity(peasant(type, xCoordinate, yCoordinate, ((typeIndex.toFloat()+1)/2), healthSystem::hitWithArrow))
+                engine.addEntity(peasant(type, xCoordinate, yCoordinate, ((typeIndex.toFloat() + 1) / 2), healthSystem::hitWithArrow))
             }
         }
     }

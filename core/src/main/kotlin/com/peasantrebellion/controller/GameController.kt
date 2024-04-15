@@ -40,7 +40,6 @@ class GameController(
                             3 -> {} // Double damage upgrade
                             4 -> {} // Triple damage upgrade
                             5 -> {} // Piercing upgrade
-                            6 -> {} // Reload time upgrade
                         }
                     }
                 }
