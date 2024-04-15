@@ -13,8 +13,10 @@ import com.peasantrebellion.model.entities.peasant
 import com.peasantrebellion.model.entities.player
 import com.peasantrebellion.model.systems.AnimationSystem
 import com.peasantrebellion.model.systems.CollisionSystem
+import com.peasantrebellion.model.systems.CopperCoinSystem
 import com.peasantrebellion.model.systems.EnemyMovementSystem
 import com.peasantrebellion.model.systems.EnemyShootingSystem
+import com.peasantrebellion.model.systems.HealthSystem
 import com.peasantrebellion.model.systems.PlayerControlSystem
 import com.peasantrebellion.model.systems.PlayerShootingSystem
 import com.peasantrebellion.model.systems.ProjectileMovementSystem
@@ -34,13 +36,15 @@ class Game {
         engine.addSystem(PlayerShootingSystem())
         engine.addSystem(EnemyShootingSystem())
         engine.addSystem(AnimationSystem())
-        engine.addSystem(EnemyWaveSystem(engine))
+        engine.addSystem(EnemyWaveSystem())
         engine.addSystem(ProjectileMovementSystem())
         engine.addSystem(CollisionSystem())
+        engine.addSystem(CopperCoinSystem())
+        val healthSystem = HealthSystem()
+        engine.addSystem(healthSystem)
+
         // Entities
-        engine.addEntity(player())
-
-
+        engine.addEntity(player(healthSystem::hitWithArrow))
     }
 
     fun update(deltaTime: Float) {

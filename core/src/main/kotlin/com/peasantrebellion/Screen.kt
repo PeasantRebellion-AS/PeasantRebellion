@@ -4,10 +4,12 @@ import com.peasantrebellion.controller.Controller
 import com.peasantrebellion.controller.GameController
 import com.peasantrebellion.controller.GameEndController
 import com.peasantrebellion.controller.MainMenuController
+import com.peasantrebellion.controller.SettingsController
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.view.GameEndView
 import com.peasantrebellion.view.GameView
 import com.peasantrebellion.view.MainMenuView
+import com.peasantrebellion.view.SettingsView
 import com.peasantrebellion.view.View
 
 class Screen private constructor(
@@ -30,6 +32,11 @@ class Screen private constructor(
                 GameController(game),
                 GameView(game),
             )
+        }
+
+        fun settings(): Screen {
+            val settingsView = SettingsView()
+            return Screen(SettingsController(settingsView), settingsView)
         }
 
         fun gameEnd(score: Int): Screen {
