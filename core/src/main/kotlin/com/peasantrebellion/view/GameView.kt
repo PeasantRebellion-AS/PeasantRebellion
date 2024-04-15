@@ -2,17 +2,19 @@ package com.peasantrebellion.view
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
-import com.peasantrebellion.model.components.CopperBalanceComponent
 import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.MAX_PLAYER_HEALTH
+import com.peasantrebellion.model.systems.CoinSystem
+import com.peasantrebellion.model.systems.ScoreSystem
 import com.peasantrebellion.view.utility.MenuFont
 import ktx.app.clearScreen
 import ktx.assets.disposeSafely
@@ -32,6 +34,10 @@ class GameView(
     private val menuFont =
         MenuFont().also {
             it.font.data.setScale(4f)
+        }
+    private val scoreFont =
+        MenuFont().also {
+            it.font.data.setScale(3f)
         }
 
     override fun render() {
@@ -97,20 +103,35 @@ class GameView(
 
             // Player coin balance
             it.draw(iconBackground, 20f, Game.HEIGHT - 109f)
-            for (player in game.entities(
-                CopperBalanceComponent::class.java,
-                UserControlledComponent::class.java,
-            )) {
-                val copperBalance = player.getComponent(CopperBalanceComponent::class.java).copperCoins
-                menuFont.font.draw(
-                    it,
-                    copperBalanceFormat.format(copperBalance),
-                    90f,
-                    Game.HEIGHT - 50f,
-                )
-            }
+            val copperBalance = game.system(CoinSystem::class.java).balance
+            menuFont.font.draw(
+                it,
+                copperBalanceFormat.format(copperBalance),
+                90f,
+                Game.HEIGHT - 50f,
+            )
             // Coin icon
             it.draw(coin, 40f, Game.HEIGHT - 96f)
+
+            // Score
+            val score = game.system(ScoreSystem::class.java).score
+            scoreFont.font.draw(
+                it,
+                "You: $score",
+                20f,
+                50f,
+            )
+            // Add check for multiplayer here when implemented
+            val opponentScore = 0
+            val opponentScoreText = "Foe: $opponentScore"
+            val layout = GlyphLayout(scoreFont.font, opponentScoreText)
+            val textWidth = layout.width
+            scoreFont.font.draw(
+                it,
+                opponentScoreText,
+                Game.WIDTH - 20f - textWidth,
+                50f,
+            )
         }
 
         viewport.camera.update()

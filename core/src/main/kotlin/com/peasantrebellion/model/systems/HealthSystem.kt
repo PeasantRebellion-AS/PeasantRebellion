@@ -50,12 +50,13 @@ class HealthSystem : EntitySystem() {
     }
 
     private fun killEnemy(enemy: Entity) {
-        engine.getSystem<CopperCoinSystem>().giveCoinsToPlayer(enemy)
+        engine.getSystem<CoinSystem>().increaseBalance(enemy)
+        engine.getSystem<ScoreSystem>().increaseScore(enemy)
         engine.removeEntity(enemy)
     }
 
     private fun killPlayer() {
-        PeasantRebellion.getInstance().switchTo(Screen.gameEnd(1000))
+        PeasantRebellion.getInstance().switchTo(Screen.gameEnd(engine.getSystem<ScoreSystem>().score))
     }
 
     fun hitWithArrow(
