@@ -9,7 +9,7 @@ import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.ProjectileComponent
 
 class ProjectileMovementSystem : IteratingSystem(
-    Family.all(ProjectileComponent::class.java).get(),
+    Family.all(ProjectileComponent::class.java, BodyComponent::class.java).get(),
 ) {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
     private val projectileMapper = ComponentMapper.getFor(ProjectileComponent::class.java)

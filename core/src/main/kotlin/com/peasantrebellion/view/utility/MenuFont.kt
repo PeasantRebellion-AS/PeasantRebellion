@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.utils.Disposable
-import ktx.assets.disposeSafely
 
 class MenuFont : Disposable {
     private val generator = FreeTypeFontGenerator(Gdx.files.internal("Peralta-Regular.ttf"))
@@ -23,13 +22,18 @@ class MenuFont : Disposable {
         generator.dispose()
     }
 
-    fun drawCentered(batch: SpriteBatch, text: String, centerX: Float, y: Float) {
+    fun drawCentered(
+        batch: SpriteBatch,
+        text: String,
+        centerX: Float,
+        y: Float,
+    ) {
         val textGlyph = GlyphLayout(font, text)
         font.draw(
             batch,
             textGlyph,
             centerX - (textGlyph.width / 2),
-            y
+            y,
         )
     }
 }

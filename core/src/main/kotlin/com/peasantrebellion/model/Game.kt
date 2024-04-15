@@ -8,15 +8,18 @@ import com.badlogic.ashley.core.PooledEngine
 import com.badlogic.ashley.utils.ImmutableArray
 import com.peasantrebellion.SCREEN_HEIGHT
 import com.peasantrebellion.SCREEN_WIDTH
-import com.peasantrebellion.model.entities.peasant
 import com.peasantrebellion.model.entities.player
 import com.peasantrebellion.model.systems.AnimationSystem
+import com.peasantrebellion.model.systems.CoinSystem
 import com.peasantrebellion.model.systems.CollisionSystem
 import com.peasantrebellion.model.systems.EnemyMovementSystem
 import com.peasantrebellion.model.systems.EnemyShootingSystem
+import com.peasantrebellion.model.systems.EnemyWaveSystem
+import com.peasantrebellion.model.systems.HealthSystem
 import com.peasantrebellion.model.systems.PlayerControlSystem
 import com.peasantrebellion.model.systems.PlayerShootingSystem
 import com.peasantrebellion.model.systems.ProjectileMovementSystem
+import com.peasantrebellion.model.systems.ScoreSystem
 
 class Game {
     private val engine: PooledEngine = PooledEngine()
@@ -33,17 +36,16 @@ class Game {
         engine.addSystem(PlayerShootingSystem())
         engine.addSystem(EnemyShootingSystem())
         engine.addSystem(AnimationSystem())
+        engine.addSystem(EnemyWaveSystem())
         engine.addSystem(ProjectileMovementSystem())
         engine.addSystem(CollisionSystem())
+        engine.addSystem(CoinSystem())
+        engine.addSystem(ScoreSystem())
+        val healthSystem = HealthSystem()
+        engine.addSystem(healthSystem)
+
         // Entities
-        engine.addEntity(player())
-        // For testing
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f, 0.5f))
-        engine.addEntity(peasant("easy", 0f, HEIGHT - 50f - 100f, 0.5f))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f, 1f))
-        engine.addEntity(peasant("medium", 100f, HEIGHT - 50f - 100f, 1f))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f, 1.5f))
-        engine.addEntity(peasant("hard", 200f, HEIGHT - 50f - 100f, 1.5f))
+        engine.addEntity(player(healthSystem::hitWithArrow))
     }
 
     fun update(deltaTime: Float) {

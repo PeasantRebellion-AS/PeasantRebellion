@@ -1,11 +1,7 @@
 package com.peasantrebellion.view
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.SCREEN_HEIGHT
 import com.peasantrebellion.SCREEN_WIDTH
@@ -35,7 +31,7 @@ class MainMenuView : View {
         )
 
     override fun render() {
-        clearScreen(red = 0.7f, green = 0.7f, blue = 0.7f)
+        clearScreen(red = 0f, green = 0f, blue = 0f)
         batch.projectionMatrix = viewport.camera.combined
         background.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         batch.use {

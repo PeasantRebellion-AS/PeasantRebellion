@@ -1,13 +1,20 @@
 package com.peasantrebellion.model.entities
 
 import com.badlogic.ashley.core.Entity
+import com.badlogic.ashley.core.Family
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.CopperDropperComponent
+import com.peasantrebellion.model.components.HealthComponent
+import com.peasantrebellion.model.components.ProjectileComponent
+import com.peasantrebellion.model.components.ScoreValueComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import ktx.assets.toInternalFile
+
+const val DEFAULT_SCORE = 5
 
 /**
  * A peasant entity.
@@ -21,6 +28,7 @@ fun peasant(
     xPos: Float,
     yPos: Float,
     fireRate: Float,
+    onCollisionWithArrow: (peasant: Entity, arrow: Entity) -> Unit,
 ): Entity {
     val textures: List<Texture> =
         listOf(
@@ -49,6 +57,8 @@ fun peasant(
                     bodyWidth,
                     bodyHeight,
                 ),
+                onCollision = onCollisionWithArrow,
+                entitiesToCollideWith = Family.all(ProjectileComponent::class.java).get(),
             ),
         )
         add(
@@ -72,5 +82,35 @@ fun peasant(
             ),
         )
         add(ShooterComponent(fireRate, enemyDrawDuration))
+        add(
+            HealthComponent(
+                when (difficulty) {
+                    "easy" -> 1
+                    "medium" -> 2
+                    "hard" -> 3
+                    else -> 1
+                },
+            ),
+        )
+        add(
+            CopperDropperComponent(
+                when (difficulty) {
+                    "easy" -> 1
+                    "medium" -> 2
+                    "hard" -> 3
+                    else -> 0
+                },
+            ),
+        )
+        add(
+            ScoreValueComponent(
+                when (difficulty) {
+                    "easy" -> 1 * DEFAULT_SCORE
+                    "medium" -> 2 * DEFAULT_SCORE
+                    "hard" -> 3 * DEFAULT_SCORE
+                    else -> 0 * DEFAULT_SCORE
+                },
+            ),
+        )
     }
 }
