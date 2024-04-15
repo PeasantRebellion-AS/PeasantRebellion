@@ -58,7 +58,8 @@ class HealthSystem : EntitySystem() {
     }
 
     private fun killPlayer() {
-        PeasantRebellion.getInstance().switchTo(Screen.gameEnd(engine.getSystem<ScoreSystem>().score))
+        PeasantRebellion.getInstance()
+            .switchTo(Screen.gameEnd(engine.getSystem<ScoreSystem>().score))
     }
 
     fun hitWithArrow(
@@ -71,19 +72,19 @@ class HealthSystem : EntitySystem() {
         if (!enemyWasHit && !playerWasHit) return
 
         if (enemyWasHit) {
-            val upgradeSystem = engine.getSystem<UpgradeSystem>()
+            val upgrades = engine.getSystem<UpgradeSystem>().upgrades
 
             val damage: Int =
-                if (upgradeSystem.hasTripleDamage) {
+                if (upgrades.hasTripleDamage) {
                     3
-                } else if (upgradeSystem.hasDoubleDamage) {
+                } else if (upgrades.hasDoubleDamage) {
                     2
                 } else {
                     1
                 }
 
             takeDamage(target, damage, this::killEnemy)
-            if (!upgradeSystem.hasPiercingShots) {
+            if (!upgrades.hasPiercingShots) {
                 engine.removeEntity(arrow)
             }
         } else {

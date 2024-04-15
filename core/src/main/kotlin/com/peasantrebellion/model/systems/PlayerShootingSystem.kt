@@ -26,9 +26,9 @@ class PlayerShootingSystem : IteratingSystem(
 
     private fun shoot(entity: Entity) {
         val shooterBody = bodyMapper[entity].body
-        val upgradeSystem = engine.getSystem<UpgradeSystem>()
+        val upgrades = engine.getSystem<UpgradeSystem>().upgrades
 
-        if (upgradeSystem.hasTripleShot) {
+        if (upgrades.hasTripleShot) {
             engine.addEntity(
                 arrow(
                     shooterBody.x + shooterBody.width / 2,
@@ -46,7 +46,7 @@ class PlayerShootingSystem : IteratingSystem(
                     750f,
                 ),
             )
-        } else if (upgradeSystem.hasDoubleShot) {
+        } else if (upgrades.hasDoubleShot) {
             engine.addEntity(
                 arrow(
                     shooterBody.x + shooterBody.width / 2,
@@ -76,7 +76,8 @@ class PlayerShootingSystem : IteratingSystem(
         if (Game.paused) {
             return
         }
-        val timeSinceLastDraw = shooterMapper[entity].apply { timeSinceLastDraw += deltaTime }.timeSinceLastDraw
+        val timeSinceLastDraw =
+            shooterMapper[entity].apply { timeSinceLastDraw += deltaTime }.timeSinceLastDraw
         animationMapper[entity].isIdle = false
         if (timeSinceLastDraw >= shooterMapper[entity].drawDuration) {
             shoot(entity)

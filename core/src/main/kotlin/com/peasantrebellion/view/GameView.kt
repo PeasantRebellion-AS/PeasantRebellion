@@ -16,6 +16,7 @@ import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.MAX_PLAYER_HEALTH
 import com.peasantrebellion.model.systems.CoinSystem
 import com.peasantrebellion.model.systems.ScoreSystem
+import com.peasantrebellion.model.systems.UpgradeSystem
 import com.peasantrebellion.view.utility.Button
 import com.peasantrebellion.view.utility.MenuFont
 import ktx.app.clearScreen
@@ -61,7 +62,11 @@ class GameView(
         listOf(
             // Open shop & settings buttons
             Button(shop, Game.WIDTH - shop.width - 7f, Game.HEIGHT / 2 - shop.height / 2 + 55f),
-            Button(settings, Game.WIDTH - settings.width - 7f, Game.HEIGHT / 2 - settings.height / 2 - 55f),
+            Button(
+                settings,
+                Game.WIDTH - settings.width - 7f,
+                Game.HEIGHT / 2 - settings.height / 2 - 55f,
+            ),
         )
     val shopButtons =
         listOf(
@@ -118,7 +123,11 @@ class GameView(
             // Top bar and side menu
             it.draw(sideMenu, Game.WIDTH - sideMenu.width, Game.HEIGHT / 2 - sideMenu.height / 2)
             it.draw(shop, Game.WIDTH - shop.width - 7f, Game.HEIGHT / 2 - shop.height / 2 + 55f)
-            it.draw(settings, Game.WIDTH - settings.width - 7f, Game.HEIGHT / 2 - settings.height / 2 - 55f)
+            it.draw(
+                settings,
+                Game.WIDTH - settings.width - 7f,
+                Game.HEIGHT / 2 - settings.height / 2 - 55f,
+            )
 
             // Hearts (HP)
             it.draw(iconBackground, Game.WIDTH - 260f, Game.HEIGHT - 109f)
@@ -174,13 +183,21 @@ class GameView(
 
             // In-game shop menu
             if (shopVisible) {
-                it.draw(shopMenu, Game.WIDTH / 2 - shopMenu.width / 2, Game.HEIGHT / 2 - shopMenu.height / 2)
+                it.draw(
+                    shopMenu,
+                    Game.WIDTH / 2 - shopMenu.width / 2,
+                    Game.HEIGHT / 2 - shopMenu.height / 2,
+                )
                 var tally = 0
                 for (button in shopButtons) {
                     tally++
                     it.draw(button.texture, button.x, button.y)
                     if (tally != 1) { // Only draw coin next to upgrade buttons
-                        it.draw(coin, button.x + 350f, button.y + button.height / 2 - coin.height / 2)
+                        it.draw(
+                            coin,
+                            button.x + 350f,
+                            button.y + button.height / 2 - coin.height / 2,
+                        )
                     }
                 }
             }
@@ -188,37 +205,49 @@ class GameView(
         // Draws prices with placeholder values
         batch.begin()
         if (shopVisible) {
+            val upgradeSystem = game.system(UpgradeSystem::class.java)
+            val upgradePrices = upgradeSystem.upgradePrices
+            val upgradesList =
+                listOf(
+                    Triple(
+                        upgradeSystem.upgrades::hasDoubleShot,
+                        upgradePrices.doubleShotPrice,
+                        Game.HEIGHT / 2 + 175f,
+                    ),
+                    Triple(
+                        upgradeSystem.upgrades::hasTripleShot,
+                        upgradePrices.tripleShotPrice,
+                        Game.HEIGHT / 2 + 75f,
+                    ),
+                    Triple(
+                        upgradeSystem.upgrades::hasDoubleDamage,
+                        upgradePrices.doubleDamagePrice,
+                        Game.HEIGHT / 2 - 25f,
+                    ),
+                    Triple(
+                        upgradeSystem.upgrades::hasTripleDamage,
+                        upgradePrices.tripleDamagePrice,
+                        Game.HEIGHT / 2 - 125f,
+                    ),
+                    Triple(
+                        upgradeSystem.upgrades::hasPiercingShots,
+                        upgradePrices.piercingShotsPrice,
+                        Game.HEIGHT / 2 - 225f,
+                    ),
+                )
+
             val font = scoreFont.font
-            font.draw(
-                batch,
-                "50",
-                Game.WIDTH / 2 + 60f,
-                Game.HEIGHT / 2 + 175f + coin.height / 2 - 5f,
-            )
-            font.draw(
-                batch,
-                "100",
-                Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 + 75f + coin.height / 2 - 5f,
-            )
-            font.draw(
-                batch,
-                "150",
-                Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 - 25f + coin.height / 2 - 5f,
-            )
-            font.draw(
-                batch,
-                "200",
-                Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 - 125f + coin.height / 2 - 5f,
-            )
-            font.draw(
-                batch,
-                "250",
-                Game.WIDTH / 2 + 25f,
-                Game.HEIGHT / 2 - 225f + coin.height / 2 - 5f,
-            )
+            for ((upgrade, price, position) in upgradesList) {
+                font.color =
+                    if (upgrade.invoke()) Color.DARK_GRAY else Color.BLACK // Gray out purchased upgrades
+                font.draw(
+                    batch,
+                    price.toString(),
+                    Game.WIDTH / 2 + 25f,
+                    position + coin.height / 2 - 5f,
+                )
+            }
+            font.color = Color.BLACK
         }
         batch.end()
         viewport.camera.update()
@@ -239,6 +268,7 @@ class GameView(
         }
         background.disposeSafely()
         menuFont.disposeSafely()
+        scoreFont.disposeSafely()
         sideMenu.disposeSafely()
         shopMenu.disposeSafely()
         coin.disposeSafely()

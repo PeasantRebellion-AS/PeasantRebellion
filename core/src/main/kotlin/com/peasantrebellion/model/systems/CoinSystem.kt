@@ -25,4 +25,12 @@ class CoinSystem : EntitySystem() {
                 MAX_COIN_BALANCE,
             )
     }
+
+    fun decreaseBalance(amount: Int): Boolean {
+        if (balance - amount < 0) {
+            return false
+        }
+        balance -= amount
+        return true
+    }
 }
