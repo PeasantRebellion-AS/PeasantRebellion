@@ -70,13 +70,13 @@ fun player(onCollisionWithArrow: (player: Entity, arrow: Entity) -> Unit): Entit
         )
         add(
             AnimationComponent(
-                0.1f,
+                playerDrawDuration / textures.size,
                 textures,
             ),
         )
         add(ShooterComponent(drawDuration = playerDrawDuration))
         add(UserControlledComponent())
-        add(HealthComponent(MAX_PLAYER_HEALTH))
+        add(HealthComponent(MAX_PLAYER_HEALTH, .5f))
         add(CopperBalanceComponent())
     }
 }

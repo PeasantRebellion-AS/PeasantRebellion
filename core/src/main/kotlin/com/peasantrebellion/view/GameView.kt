@@ -3,6 +3,7 @@ package com.peasantrebellion.view
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.PeasantRebellion
@@ -60,12 +61,18 @@ class GameView(
                 val textureComponent = entity.getComponent(TextureComponent::class.java)
                 val textureBody = textureComponent.bodyToTextureRectangle(body)
 
+                val textureRegion = TextureRegion(textureComponent.texture)
                 it.draw(
-                    textureComponent.texture,
+                    textureRegion,
                     textureBody.x,
                     textureBody.y,
+                    textureBody.width / 2,
+                    textureBody.height / 2,
                     textureBody.width,
                     textureBody.height,
+                    1f,
+                    1f,
+                    textureComponent.rotation,
                 )
 
                 if (textureComponent.displayDebugBodyOutline) {
@@ -101,7 +108,8 @@ class GameView(
                 CopperBalanceComponent::class.java,
                 UserControlledComponent::class.java,
             )) {
-                val copperBalance = player.getComponent(CopperBalanceComponent::class.java).copperCoins
+                val copperBalance =
+                    player.getComponent(CopperBalanceComponent::class.java).copperCoins
                 menuFont.font.draw(
                     it,
                     copperBalanceFormat.format(copperBalance),

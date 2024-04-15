@@ -1,12 +1,11 @@
-package com.peasantrebellion.model.components
+package com.peasantrebellion.model.systems
 
-import com.badlogic.ashley.core.Component
+import com.badlogic.ashley.core.EntitySystem
 
-class UpgradeComponent : Component {
+class UpgradeSystem : EntitySystem() {
     var hasDoubleShot = false
     var hasTripleShot = false
     var hasDoubleDamage = false
     var hasTripleDamage = false
     var hasPiercingShots = false
-    var hasFasterReload = false
 }

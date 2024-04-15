@@ -15,9 +15,8 @@ fun arrow(
     yVelocity: Float,
 ): Entity {
     // Arrow pointing upwards if shot by player, pointing downwards otherwise
-    val path = if (yVelocity > 0) "player/arrow.png" else "peasant/arrow.png"
     val texture =
-        Texture(path.toInternalFile(), true).apply {
+        Texture("projectiles/arrow.png".toInternalFile(), true).apply {
             setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         }
 

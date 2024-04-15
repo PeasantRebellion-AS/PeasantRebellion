@@ -9,6 +9,7 @@ import com.peasantrebellion.model.components.BodyComponent
 import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.arrow
+import ktx.ashley.getSystem
 
 class PlayerShootingSystem : IteratingSystem(
     Family.all(
@@ -24,7 +25,46 @@ class PlayerShootingSystem : IteratingSystem(
 
     private fun shoot(entity: Entity) {
         val shooterBody = bodyMapper[entity].body
-        engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, 0f, 750f))
+        val upgradeSystem = engine.getSystem<UpgradeSystem>()
+
+        if (upgradeSystem.hasTripleShot) {
+            engine.addEntity(
+                arrow(
+                    shooterBody.x + shooterBody.width / 2,
+                    shooterBody.y,
+                    200f,
+                    750f,
+                ),
+            )
+            engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, 0f, 750f))
+            engine.addEntity(
+                arrow(
+                    shooterBody.x + shooterBody.width / 2,
+                    shooterBody.y,
+                    -200f,
+                    750f,
+                ),
+            )
+        } else if (upgradeSystem.hasDoubleShot) {
+            engine.addEntity(
+                arrow(
+                    shooterBody.x + shooterBody.width / 2,
+                    shooterBody.y,
+                    200f,
+                    750f,
+                ),
+            )
+            engine.addEntity(
+                arrow(
+                    shooterBody.x + shooterBody.width / 2,
+                    shooterBody.y,
+                    -200f,
+                    750f,
+                ),
+            )
+        } else {
+            engine.addEntity(arrow(shooterBody.x + shooterBody.width / 2, shooterBody.y, 0f, 750f))
+        }
         shooterMapper[entity].timeSinceLastDraw = 0f
     }
 
@@ -32,7 +72,8 @@ class PlayerShootingSystem : IteratingSystem(
         entity: Entity,
         deltaTime: Float,
     ) {
-        val timeSinceLastDraw = shooterMapper[entity].apply { timeSinceLastDraw += deltaTime }.timeSinceLastDraw
+        val timeSinceLastDraw =
+            shooterMapper[entity].apply { timeSinceLastDraw += deltaTime }.timeSinceLastDraw
         animationMapper[entity].isIdle = false
         if (timeSinceLastDraw >= shooterMapper[entity].drawDuration) {
             shoot(entity)
