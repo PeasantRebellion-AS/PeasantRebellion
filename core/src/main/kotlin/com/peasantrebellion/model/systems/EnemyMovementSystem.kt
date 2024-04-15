@@ -9,6 +9,7 @@ import com.peasantrebellion.Screen
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import ktx.ashley.getSystem
@@ -23,10 +24,13 @@ class EnemyMovementSystem : IteratingSystem(
         BodyComponent::class.java,
         TextureComponent::class.java,
         AnimationComponent::class.java,
+        HealthComponent::class.java,
     ).exclude(UserControlledComponent::class.java).get(),
 ) {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
-    private var direction = 1 // The direction of the peasant, 1 for right, -1 for left, 0 for no movement
+    private val healthMapper = ComponentMapper.getFor(HealthComponent::class.java)
+    private var direction =
+        1 // The direction of the peasant, 1 for right, -1 for left, 0 for no movement
 
     override fun update(deltaTime: Float) {
         if (Game.paused) {
@@ -69,6 +73,7 @@ class EnemyMovementSystem : IteratingSystem(
         deltaTime: Float,
     ) {
         val body = bodyMapper[entity].body
+        healthMapper[entity].timeSinceHit += deltaTime
         // Move the peasant to either the right or left, depending on the direction
         body.x += ENEMY_MOVEMENT_SPEED * deltaTime * direction
     }

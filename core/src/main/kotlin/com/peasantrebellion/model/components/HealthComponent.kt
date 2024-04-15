@@ -4,4 +4,7 @@ import com.badlogic.ashley.core.Component
 
 class HealthComponent(
     var hp: Int,
-) : Component
+    var immunityPeriod: Float,
+) : Component {
+    var timeSinceHit = Float.POSITIVE_INFINITY
+}

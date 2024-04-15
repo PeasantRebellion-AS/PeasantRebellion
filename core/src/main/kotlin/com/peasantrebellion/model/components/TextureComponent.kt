@@ -8,4 +8,6 @@ class TextureComponent(
     var texture: Texture,
     val bodyToTextureRectangle: (Rectangle) -> Rectangle = { it },
     val displayDebugBodyOutline: Boolean = false,
-) : Component
+) : Component {
+    var rotation = 0f
+}

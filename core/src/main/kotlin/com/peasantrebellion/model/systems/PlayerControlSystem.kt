@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
+import com.peasantrebellion.model.components.HealthComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import kotlin.math.max
 import kotlin.math.min
@@ -13,12 +14,21 @@ const val PLAYER_MOVEMENT_SPEED = 1400f
 
 class PlayerControlSystem : EntitySystem() {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
+    private val healthMapper = ComponentMapper.getFor(HealthComponent::class.java)
 
     private val playerFamily =
         Family.all(
             BodyComponent::class.java,
             UserControlledComponent::class.java,
+            HealthComponent::class.java,
         ).get()
+
+    override fun update(deltaTime: Float) {
+        super.update(deltaTime)
+        val player = engine.getEntitiesFor(playerFamily).first()
+
+        healthMapper[player].timeSinceHit += deltaTime
+    }
 
     fun moveTowards(
         xTarget: Float,

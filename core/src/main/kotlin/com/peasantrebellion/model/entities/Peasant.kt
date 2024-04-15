@@ -90,6 +90,7 @@ fun peasant(
                     "hard" -> 3
                     else -> 1
                 },
+                .5f,
             ),
         )
         add(

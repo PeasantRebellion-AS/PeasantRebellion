@@ -20,6 +20,7 @@ import com.peasantrebellion.model.systems.PlayerControlSystem
 import com.peasantrebellion.model.systems.PlayerShootingSystem
 import com.peasantrebellion.model.systems.ProjectileMovementSystem
 import com.peasantrebellion.model.systems.ScoreSystem
+import com.peasantrebellion.model.systems.UpgradeSystem
 
 class Game {
     private val engine: PooledEngine = PooledEngine()
@@ -39,6 +40,7 @@ class Game {
         engine.addSystem(EnemyWaveSystem())
         engine.addSystem(ProjectileMovementSystem())
         engine.addSystem(CollisionSystem())
+        engine.addSystem(UpgradeSystem())
         engine.addSystem(CoinSystem())
         engine.addSystem(ScoreSystem())
         val healthSystem = HealthSystem()

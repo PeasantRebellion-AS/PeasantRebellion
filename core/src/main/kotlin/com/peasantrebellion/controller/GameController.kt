@@ -4,6 +4,7 @@ import com.peasantrebellion.controller.utility.whenJustTouched
 import com.peasantrebellion.controller.utility.whenTouching
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.systems.PlayerControlSystem
+import com.peasantrebellion.model.systems.UpgradeSystem
 import com.peasantrebellion.view.GameView
 
 class GameController(
@@ -23,6 +24,7 @@ class GameController(
                             gameView.shopVisible = true
                             Game.paused = true // Pauses game systems
                         }
+
                         1 -> {} // Settings
                     }
                 }
@@ -30,16 +32,16 @@ class GameController(
             if (gameView.shopVisible) {
                 gameView.shopButtons.forEachIndexed { index, button ->
                     if (button.containsCoordinates(x, y)) {
+                        val upgradeSystem = game.system(UpgradeSystem::class.java)
                         when (index) {
                             0 -> { // Back button
                                 gameView.shopVisible = false
                                 Game.paused = false
                             }
-                            1 -> {} // Double shot upgrade
-                            2 -> {} // Triple shot upgrade
-                            3 -> {} // Double damage upgrade
-                            4 -> {} // Triple damage upgrade
-                            5 -> {} // Piercing upgrade
+
+                            else -> {
+                                upgradeSystem.activateUpgrade(index)
+                            }
                         }
                     }
                 }

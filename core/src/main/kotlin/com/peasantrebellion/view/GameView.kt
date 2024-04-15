@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.peasantrebellion.PeasantRebellion
@@ -15,6 +16,7 @@ import com.peasantrebellion.model.components.UserControlledComponent
 import com.peasantrebellion.model.entities.MAX_PLAYER_HEALTH
 import com.peasantrebellion.model.systems.CoinSystem
 import com.peasantrebellion.model.systems.ScoreSystem
+import com.peasantrebellion.model.systems.UpgradeSystem
 import com.peasantrebellion.view.utility.Button
 import com.peasantrebellion.view.utility.MenuFont
 import ktx.app.clearScreen
@@ -60,7 +62,11 @@ class GameView(
         listOf(
             // Open shop & settings buttons
             Button(shop, Game.WIDTH - shop.width - 7f, Game.HEIGHT / 2 - shop.height / 2 + 55f),
-            Button(settings, Game.WIDTH - settings.width - 7f, Game.HEIGHT / 2 - settings.height / 2 - 55f),
+            Button(
+                settings,
+                Game.WIDTH - settings.width - 7f,
+                Game.HEIGHT / 2 - settings.height / 2 - 55f,
+            ),
         )
     val shopButtons =
         listOf(
@@ -94,12 +100,18 @@ class GameView(
                 val textureComponent = entity.getComponent(TextureComponent::class.java)
                 val textureBody = textureComponent.bodyToTextureRectangle(body)
 
+                val textureRegion = TextureRegion(textureComponent.texture)
                 it.draw(
-                    textureComponent.texture,
+                    textureRegion,
                     textureBody.x,
                     textureBody.y,
+                    textureBody.width / 2,
+                    textureBody.height / 2,
                     textureBody.width,
                     textureBody.height,
+                    1f,
+                    1f,
+                    textureComponent.rotation,
                 )
 
                 if (textureComponent.displayDebugBodyOutline) {
@@ -111,7 +123,11 @@ class GameView(
             // Top bar and side menu
             it.draw(sideMenu, Game.WIDTH - sideMenu.width, Game.HEIGHT / 2 - sideMenu.height / 2)
             it.draw(shop, Game.WIDTH - shop.width - 7f, Game.HEIGHT / 2 - shop.height / 2 + 55f)
-            it.draw(settings, Game.WIDTH - settings.width - 7f, Game.HEIGHT / 2 - settings.height / 2 - 55f)
+            it.draw(
+                settings,
+                Game.WIDTH - settings.width - 7f,
+                Game.HEIGHT / 2 - settings.height / 2 - 55f,
+            )
 
             // Hearts (HP)
             it.draw(iconBackground, Game.WIDTH - 260f, Game.HEIGHT - 109f)
@@ -167,51 +183,83 @@ class GameView(
 
             // In-game shop menu
             if (shopVisible) {
-                it.draw(shopMenu, Game.WIDTH / 2 - shopMenu.width / 2, Game.HEIGHT / 2 - shopMenu.height / 2)
+                it.draw(
+                    shopMenu,
+                    Game.WIDTH / 2 - shopMenu.width / 2,
+                    Game.HEIGHT / 2 - shopMenu.height / 2,
+                )
                 var tally = 0
                 for (button in shopButtons) {
                     tally++
                     it.draw(button.texture, button.x, button.y)
                     if (tally != 1) { // Only draw coin next to upgrade buttons
-                        it.draw(coin, button.x + 350f, button.y + button.height / 2 - coin.height / 2)
+                        it.draw(
+                            coin,
+                            button.x + 225f,
+                            button.y + button.height / 2 - coin.height / 2,
+                        )
                     }
                 }
             }
         }
-        // Draws prices with placeholder values
+        // Draws prices
         batch.begin()
         if (shopVisible) {
+            val upgradeSystem = game.system(UpgradeSystem::class.java)
+            val upgradePrices = upgradeSystem.upgradePrices
             val font = scoreFont.font
+
+            // This is awful, but I don't want to spend time changing it
+            if (upgradeSystem.upgrades.hasDoubleShot || upgradeSystem.upgrades.hasTripleShot) {
+                font.color = Color.DARK_GRAY
+            }
             font.draw(
                 batch,
-                "50",
-                Game.WIDTH / 2 + 60f,
+                upgradePrices.doubleShotPrice.toString(),
+                Game.WIDTH / 2 + 75f,
                 Game.HEIGHT / 2 + 175f + coin.height / 2 - 5f,
             )
+            font.color = Color.BLACK
+            if (upgradeSystem.upgrades.hasTripleShot) {
+                font.color = Color.DARK_GRAY
+            }
             font.draw(
                 batch,
-                "100",
-                Game.WIDTH / 2 + 25f,
+                upgradePrices.tripleShotPrice.toString(),
+                Game.WIDTH / 2 + 75f,
                 Game.HEIGHT / 2 + 75f + coin.height / 2 - 5f,
             )
+            font.color = Color.BLACK
+            if (upgradeSystem.upgrades.hasDoubleDamage || upgradeSystem.upgrades.hasTripleDamage) {
+                font.color = Color.DARK_GRAY
+            }
             font.draw(
                 batch,
-                "150",
-                Game.WIDTH / 2 + 25f,
+                upgradePrices.doubleDamagePrice.toString(),
+                Game.WIDTH / 2 + 75f,
                 Game.HEIGHT / 2 - 25f + coin.height / 2 - 5f,
             )
+            font.color = Color.BLACK
+            if (upgradeSystem.upgrades.hasTripleDamage) {
+                font.color = Color.DARK_GRAY
+            }
             font.draw(
                 batch,
-                "200",
-                Game.WIDTH / 2 + 25f,
+                upgradePrices.tripleDamagePrice.toString(),
+                Game.WIDTH / 2 + 75f,
                 Game.HEIGHT / 2 - 125f + coin.height / 2 - 5f,
             )
+            font.color = Color.BLACK
+            if (upgradeSystem.upgrades.hasPiercingShots) {
+                font.color = Color.DARK_GRAY
+            }
             font.draw(
                 batch,
-                "250",
-                Game.WIDTH / 2 + 25f,
+                upgradePrices.piercingShotsPrice.toString(),
+                Game.WIDTH / 2 + 75f,
                 Game.HEIGHT / 2 - 225f + coin.height / 2 - 5f,
             )
+            font.color = Color.BLACK
         }
         batch.end()
         viewport.camera.update()
@@ -232,6 +280,7 @@ class GameView(
         }
         background.disposeSafely()
         menuFont.disposeSafely()
+        scoreFont.disposeSafely()
         sideMenu.disposeSafely()
         shopMenu.disposeSafely()
         coin.disposeSafely()
