@@ -12,39 +12,45 @@ class GameController(
     private val gameView: GameView,
 ) : Controller {
     override fun update(deltaTime: Float) {
-        whenTouching { x, _ ->
-            // Move player
-            game.system(PlayerControlSystem::class.java).moveTowards(x, deltaTime)
-        }
+        var sideMenuClicked = false
         whenJustTouched { x, y ->
             gameView.sideMenuButtons.forEachIndexed { index, button ->
                 if (button.containsCoordinates(x, y)) {
+                    sideMenuClicked = true
                     when (index) {
                         0 -> { // Upgrade shop
                             gameView.shopVisible = true
-                            Game.paused = true // Pauses game systems
+                            if (!gameView.gameIsMultiplayer) {
+                                Game.paused = true // Pauses game systems in singleplayer
+                            }
                         }
-
                         1 -> {} // Settings
                     }
                 }
             }
             if (gameView.shopVisible) {
-                gameView.shopButtons.forEachIndexed { index, button ->
+                gameView.upgradeButtons.forEachIndexed { index, button ->
                     if (button.containsCoordinates(x, y)) {
                         val upgradeSystem = game.system(UpgradeSystem::class.java)
-                        when (index) {
-                            0 -> { // Back button
-                                gameView.shopVisible = false
-                                Game.paused = false
-                            }
-
-                            else -> {
-                                upgradeSystem.activateUpgrade(index)
-                            }
+                        if (gameView.upgradesVisible) {
+                            upgradeSystem.activateUpgrade(index + 1)
                         }
                     }
                 }
+                // Back button pressed
+                if (gameView.backButton.containsCoordinates(x, y)) {
+                    gameView.shopVisible = false
+                    Game.paused = false
+                } else if (gameView.gameIsMultiplayer && gameView.shopToggleButton.containsCoordinates(x, y)) {
+                    // Multiplayer shop type toggle pressed
+                    gameView.upgradesVisible = !gameView.upgradesVisible
+                }
+            }
+        }
+        whenTouching { x, _ ->
+            // Move player
+            if (!gameView.shopVisible && !sideMenuClicked) {
+                game.system(PlayerControlSystem::class.java).moveTowards(x, deltaTime)
             }
         }
         game.update(deltaTime)

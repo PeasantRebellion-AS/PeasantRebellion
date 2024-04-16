@@ -41,7 +41,31 @@ class GameView(
     private val doubleDamage = Texture("menu/double_damage_icon.png")
     private val tripleDamage = Texture("menu/triple_damage_icon.png")
     private val piercingShot = Texture("menu/piercing_shot_icon.png")
-    private val backButton = Texture("menu/back_button_small.png")
+    private val backArrow = Texture("menu/back_button_small.png")
+
+    private val peasantEasy = Texture("menu/peasant_easy_icon.png")
+    private val peasantMedium = Texture("menu/peasant_medium_icon.png")
+    private val peasantHard = Texture("menu/peasant_hard_icon.png")
+    private val attackToggle = Texture("menu/attack_button.png")
+    private val upgradesToggle = Texture("menu/upgrades_button.png")
+    val shopToggleButton =
+        Button(
+            attackToggle,
+            Game.WIDTH / 2 - attackToggle.width / 2,
+            Game.HEIGHT / 2 - 375f,
+        )
+    val backButton =
+        Button(
+            backArrow,
+            Game.WIDTH / 2 - 300f,
+            Game.HEIGHT / 2 + shopMenu.height / 2 - 130f,
+        )
+
+    // TEMPORARY MULTIPLAYER BOOL, SET gameIsMultiplayer TO TRUE TO SHOW PAGE TWO IN SHOP
+    val gameIsMultiplayer = false
+
+    // BOOL DETERMINING CURRENT PAGE IN SHOP (ALWAYS TRUE IN SINGLEPLAYER)
+    var upgradesVisible = true
 
     private val iconBackground = Texture("game_icon_background.png")
     private val emptyHeart = Texture("hearts/heart_empty.png")
@@ -68,15 +92,22 @@ class GameView(
                 Game.HEIGHT / 2 - settings.height / 2 - 55f,
             ),
         )
-    val shopButtons =
+
+    val upgradeButtons =
         listOf(
             // Upgrade shop buttons
-            Button(backButton, Game.WIDTH / 2 - 300f, Game.HEIGHT / 2 + shopMenu.height / 2 - 130f),
             Button(doubleShot, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 + 175f),
             Button(tripleShot, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 + 75),
             Button(doubleDamage, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 25f),
             Button(tripleDamage, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 125f),
             Button(piercingShot, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 225f),
+        )
+
+    val peasantButtons =
+        listOf(
+            Button(peasantEasy, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 + 175f),
+            Button(peasantMedium, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 + 75),
+            Button(peasantHard, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 25f),
         )
 
     override fun render() {
@@ -120,7 +151,7 @@ class GameView(
                     it.begin()
                 }
             }
-            // Top bar and side menu
+            // Side menu
             it.draw(sideMenu, Game.WIDTH - sideMenu.width, Game.HEIGHT / 2 - sideMenu.height / 2)
             it.draw(shop, Game.WIDTH - shop.width - 7f, Game.HEIGHT / 2 - shop.height / 2 + 55f)
             it.draw(
@@ -188,17 +219,39 @@ class GameView(
                     Game.WIDTH / 2 - shopMenu.width / 2,
                     Game.HEIGHT / 2 - shopMenu.height / 2,
                 )
-                var tally = 0
-                for (button in shopButtons) {
-                    tally++
-                    it.draw(button.texture, button.x, button.y)
-                    if (tally != 1) { // Only draw coin next to upgrade buttons
+                it.draw(backButton.texture, backButton.x, backButton.y)
+                if (upgradesVisible) {
+                    for (button in upgradeButtons) {
+                        it.draw(button.texture, button.x, button.y)
                         it.draw(
                             coin,
                             button.x + 225f,
                             button.y + button.height / 2 - coin.height / 2,
                         )
                     }
+                } else {
+                    for (button in peasantButtons) {
+                        it.draw(button.texture, button.x, button.y)
+                        it.draw(
+                            coin,
+                            button.x + 225f,
+                            button.y + button.height / 2 - coin.height / 2,
+                        )
+                    }
+                }
+                // Multiplayer shop toggle between upgrades and enemy purchases
+                if (gameIsMultiplayer && upgradesVisible) {
+                    it.draw(
+                        attackToggle,
+                        shopToggleButton.x,
+                        shopToggleButton.y,
+                    )
+                } else if (gameIsMultiplayer && !upgradesVisible) {
+                    it.draw(
+                        upgradesToggle,
+                        shopToggleButton.x,
+                        shopToggleButton.y,
+                    )
                 }
             }
         }
@@ -209,58 +262,80 @@ class GameView(
             val upgradePrices = upgradeSystem.upgradePrices
             val font = scoreFont.font
 
-            // This is awful, but I don't want to spend time changing it
-            if (upgradeSystem.upgrades.hasDoubleShot || upgradeSystem.upgrades.hasTripleShot) {
-                font.color = Color.DARK_GRAY
+            if (upgradesVisible) {
+                // This is awful, but I don't want to spend time changing it
+                if (upgradeSystem.upgrades.hasDoubleShot || upgradeSystem.upgrades.hasTripleShot) {
+                    font.color = Color.DARK_GRAY
+                }
+                font.draw(
+                    batch,
+                    upgradePrices.doubleShotPrice.toString(),
+                    Game.WIDTH / 2 + 75f,
+                    Game.HEIGHT / 2 + 175f + coin.height / 2 - 5f,
+                )
+                font.color = Color.BLACK
+                if (upgradeSystem.upgrades.hasTripleShot) {
+                    font.color = Color.DARK_GRAY
+                }
+                font.draw(
+                    batch,
+                    upgradePrices.tripleShotPrice.toString(),
+                    Game.WIDTH / 2 + 75f,
+                    Game.HEIGHT / 2 + 75f + coin.height / 2 - 5f,
+                )
+                font.color = Color.BLACK
+                if (upgradeSystem.upgrades.hasDoubleDamage || upgradeSystem.upgrades.hasTripleDamage) {
+                    font.color = Color.DARK_GRAY
+                }
+                font.draw(
+                    batch,
+                    upgradePrices.doubleDamagePrice.toString(),
+                    Game.WIDTH / 2 + 75f,
+                    Game.HEIGHT / 2 - 25f + coin.height / 2 - 5f,
+                )
+                font.color = Color.BLACK
+                if (upgradeSystem.upgrades.hasTripleDamage) {
+                    font.color = Color.DARK_GRAY
+                }
+                font.draw(
+                    batch,
+                    upgradePrices.tripleDamagePrice.toString(),
+                    Game.WIDTH / 2 + 75f,
+                    Game.HEIGHT / 2 - 125f + coin.height / 2 - 5f,
+                )
+                font.color = Color.BLACK
+                if (upgradeSystem.upgrades.hasPiercingShots) {
+                    font.color = Color.DARK_GRAY
+                }
+                font.draw(
+                    batch,
+                    upgradePrices.piercingShotsPrice.toString(),
+                    Game.WIDTH / 2 + 75f,
+                    Game.HEIGHT / 2 - 225f + coin.height / 2 - 5f,
+                )
+                font.color = Color.BLACK
+            } else { // Placeholder prices for purchasing peasants tab
+                font.draw(
+                    batch,
+                    "10",
+                    Game.WIDTH / 2 + 75f,
+                    Game.HEIGHT / 2 + 175f + coin.height / 2 - 5f,
+                )
+                font.draw(
+                    batch,
+                    "15",
+                    Game.WIDTH / 2 + 75f,
+                    Game.HEIGHT / 2 + 75f + coin.height / 2 - 5f,
+                )
+                font.draw(
+                    batch,
+                    "20",
+                    Game.WIDTH / 2 + 75f,
+                    Game.HEIGHT / 2 - 25f + coin.height / 2 - 5f,
+                )
             }
-            font.draw(
-                batch,
-                upgradePrices.doubleShotPrice.toString(),
-                Game.WIDTH / 2 + 75f,
-                Game.HEIGHT / 2 + 175f + coin.height / 2 - 5f,
-            )
-            font.color = Color.BLACK
-            if (upgradeSystem.upgrades.hasTripleShot) {
-                font.color = Color.DARK_GRAY
-            }
-            font.draw(
-                batch,
-                upgradePrices.tripleShotPrice.toString(),
-                Game.WIDTH / 2 + 75f,
-                Game.HEIGHT / 2 + 75f + coin.height / 2 - 5f,
-            )
-            font.color = Color.BLACK
-            if (upgradeSystem.upgrades.hasDoubleDamage || upgradeSystem.upgrades.hasTripleDamage) {
-                font.color = Color.DARK_GRAY
-            }
-            font.draw(
-                batch,
-                upgradePrices.doubleDamagePrice.toString(),
-                Game.WIDTH / 2 + 75f,
-                Game.HEIGHT / 2 - 25f + coin.height / 2 - 5f,
-            )
-            font.color = Color.BLACK
-            if (upgradeSystem.upgrades.hasTripleDamage) {
-                font.color = Color.DARK_GRAY
-            }
-            font.draw(
-                batch,
-                upgradePrices.tripleDamagePrice.toString(),
-                Game.WIDTH / 2 + 75f,
-                Game.HEIGHT / 2 - 125f + coin.height / 2 - 5f,
-            )
-            font.color = Color.BLACK
-            if (upgradeSystem.upgrades.hasPiercingShots) {
-                font.color = Color.DARK_GRAY
-            }
-            font.draw(
-                batch,
-                upgradePrices.piercingShotsPrice.toString(),
-                Game.WIDTH / 2 + 75f,
-                Game.HEIGHT / 2 - 225f + coin.height / 2 - 5f,
-            )
-            font.color = Color.BLACK
         }
+
         batch.end()
         viewport.camera.update()
     }
@@ -272,10 +347,13 @@ class GameView(
             val texture = entity.getComponent(TextureComponent::class.java).texture
             texture.dispose()
         }
-        for (button in shopButtons) {
+        for (button in upgradeButtons) {
             button.texture.disposeSafely()
         }
         for (button in sideMenuButtons) {
+            button.texture.disposeSafely()
+        }
+        for (button in peasantButtons) {
             button.texture.disposeSafely()
         }
         background.disposeSafely()
@@ -283,6 +361,9 @@ class GameView(
         scoreFont.disposeSafely()
         sideMenu.disposeSafely()
         shopMenu.disposeSafely()
+        attackToggle.disposeSafely()
+        upgradesToggle.disposeSafely()
+        backArrow.disposeSafely()
         coin.disposeSafely()
         batch.disposeSafely()
     }
