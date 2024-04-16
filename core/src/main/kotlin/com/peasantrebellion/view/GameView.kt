@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.scenes.scene2d.ui.Slider
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
@@ -35,6 +37,7 @@ class GameView(
     private val shop = Texture("menu/upgrade_shop_icon.png")
     private val sideMenu = Texture("menu/side_menu.png")
     private val settings = Texture("menu/settings_icon.png")
+    private val settingsMenu = Texture("menu/in_game_settings.png")
     private val shopMenu = Texture("menu/shop_menu.png")
     private val doubleShot = Texture("menu/double_shot_icon.png")
     private val tripleShot = Texture("menu/triple_shot_icon.png")
@@ -78,6 +81,55 @@ class GameView(
             Button(tripleDamage, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 125f),
             Button(piercingShot, Game.WIDTH / 2 - 200f, Game.HEIGHT / 2 - shop.height / 2 - 225f),
         )
+
+    var settingsVisible = false
+    val settingsBackButton = Button(backButton, Game.WIDTH / 2 - 300f, Game.HEIGHT / 2 + shopMenu.height / 2 - 130f)
+    val settingsQuitButton = Button(Texture("menu/large_button.png"), TutorialView.WIDTH / 2 - 200f, TutorialView.HEIGHT - 1000f)
+
+    // Music slider
+    private val musicSliderBackground = Texture("menu/slider.png")
+    private val musicSliderKnob = Texture("menu/knob.png")
+    val musicSlider: Slider =
+        Slider(
+            0f,
+            1f,
+            0.01f,
+            false,
+            Slider.SliderStyle().apply {
+                background = TextureRegionDrawable(TextureRegion(musicSliderBackground))
+                knob = TextureRegionDrawable(TextureRegion(musicSliderKnob))
+            },
+        ).apply {
+            // Set knob position to music volume
+            value = PeasantRebellion.getInstance().music.volume
+            // Set size and position
+            setSize(musicSliderBackground.width.toFloat(), musicSliderBackground.height.toFloat())
+            setPosition((SettingsView.WIDTH - musicSliderBackground.width.toFloat() - musicSliderKnob.width.toFloat()) / 2, 750f)
+        }
+
+    // Sound effects slider
+    private val soundEffectsSliderBackground = Texture("menu/slider.png")
+    private val soundEffectsSliderKnob = Texture("menu/knob.png")
+    val soundEffectsSlider: Slider =
+        Slider(
+            0f,
+            1f,
+            0.01f,
+            false,
+            Slider.SliderStyle().apply {
+                background = TextureRegionDrawable(TextureRegion(soundEffectsSliderBackground))
+                knob = TextureRegionDrawable(TextureRegion(soundEffectsSliderKnob))
+            },
+        ).apply {
+            // Set knob position to sound effects volume
+            value = PeasantRebellion.getInstance().soundEffectsVolume
+            // Set size and position
+            setSize(soundEffectsSliderBackground.width.toFloat(), soundEffectsSliderBackground.height.toFloat())
+            setPosition(
+                (SettingsView.WIDTH - soundEffectsSliderBackground.width.toFloat() - soundEffectsSliderKnob.width.toFloat()) / 2,
+                500f,
+            )
+        }
 
     override fun render() {
         clearScreen(red = 0f, green = 0f, blue = 0f)
@@ -200,6 +252,63 @@ class GameView(
                         )
                     }
                 }
+            }
+            // In-game settings
+            if (settingsVisible) {
+                it.draw(
+                    settingsMenu,
+                    Game.WIDTH / 2 - settingsMenu.width / 2,
+                    Game.HEIGHT / 2 - settingsMenu.height / 2,
+                )
+                // back button
+                it.draw(settingsBackButton.texture, settingsBackButton.x, settingsBackButton.y)
+                // quit button
+                it.draw(settingsQuitButton.texture, settingsQuitButton.x, settingsQuitButton.y)
+
+                with(menuFont) {
+                    // settings title
+                    font.data.setScale(4f)
+                    font.color = Color.BLACK
+                    drawCentered(it, "Settings", GameEndView.WIDTH / 2, GameEndView.HEIGHT - 275f)
+                    // music title over slider
+                    font.data.setScale(3f)
+                    drawCentered(it, "Music", GameEndView.WIDTH / 2, musicSlider.y + 150f)
+                    // sound effects title over slider
+                    drawCentered(it, "Sound Effects", GameEndView.WIDTH / 2, soundEffectsSlider.y + 150f)
+                    // quit text
+                    drawCentered(it, "Quit", GameEndView.WIDTH / 2, TutorialView.HEIGHT - 940f)
+                }
+
+                // music slider
+                batch.draw(
+                    musicSliderBackground,
+                    musicSlider.x,
+                    musicSlider.y,
+                    musicSlider.width + musicSliderKnob.width,
+                    musicSlider.height,
+                )
+                batch.draw(
+                    musicSliderKnob,
+                    musicSlider.x + musicSlider.width * musicSlider.percent,
+                    musicSlider.y,
+                    musicSliderKnob.width.toFloat(),
+                    musicSliderKnob.height.toFloat(),
+                )
+                // Sound effects slider
+                batch.draw(
+                    soundEffectsSliderBackground,
+                    soundEffectsSlider.x,
+                    soundEffectsSlider.y,
+                    soundEffectsSlider.width + soundEffectsSliderKnob.width,
+                    soundEffectsSlider.height,
+                )
+                batch.draw(
+                    soundEffectsSliderKnob,
+                    soundEffectsSlider.x + soundEffectsSlider.width * soundEffectsSlider.percent,
+                    soundEffectsSlider.y,
+                    soundEffectsSliderKnob.width.toFloat(),
+                    soundEffectsSliderKnob.height.toFloat(),
+                )
             }
         }
         // Draws prices

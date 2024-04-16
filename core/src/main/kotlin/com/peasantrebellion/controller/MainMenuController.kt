@@ -16,7 +16,9 @@ class MainMenuController(
                         0 -> PeasantRebellion.getInstance().switchTo(Screen.game()) // Singleplayer
                         1 -> {} // Multiplayer
                         2 -> {} // Leaderboard
-                        3 -> {} // Tutorial
+                        3 -> {
+                            PeasantRebellion.getInstance().switchTo(Screen.tutorial())
+                        } // Tutorial
                         4 -> PeasantRebellion.getInstance().switchTo(Screen.settings()) // Settings
                     }
                 }
