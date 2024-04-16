@@ -12,12 +12,14 @@ class TutorialController(private val tutorialView: TutorialView) : Controller {
             if (touchedBackButton) {
                 PeasantRebellion.getInstance().switchTo(Screen.mainMenu())
             }
-        }
 
-        whenJustTouched { x, y ->
-            val touchedBackButton = tutorialView.nextButton.containsCoordinates(x, y)
-            if (touchedBackButton) {
-                PeasantRebellion.getInstance().switchTo(Screen.mainMenu())
+            val touchedNextButton = tutorialView.nextButton.containsCoordinates(x, y)
+            if (touchedNextButton) {
+                if (tutorialView.currentTutorial == "7") {
+                    PeasantRebellion.getInstance().switchTo(Screen.mainMenu())
+                } else {
+                    tutorialView.handleNext()
+                }
             }
         }
     }
