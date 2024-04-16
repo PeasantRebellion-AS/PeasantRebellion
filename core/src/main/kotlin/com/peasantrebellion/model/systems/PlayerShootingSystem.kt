@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.Family
 import com.badlogic.ashley.systems.IteratingSystem
+import com.badlogic.gdx.Gdx
+import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.AnimationComponent
 import com.peasantrebellion.model.components.BodyComponent
@@ -23,8 +25,11 @@ class PlayerShootingSystem : IteratingSystem(
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
     private val animationMapper = ComponentMapper.getFor(AnimationComponent::class.java)
     private val shooterMapper = ComponentMapper.getFor(ShooterComponent::class.java)
+    private val shootingSound = Gdx.audio.newSound(Gdx.files.internal("sfx/bow-shooting.wav"))
 
     private fun shoot(entity: Entity) {
+        shootingSound.play(PeasantRebellion.getInstance().soundEffectsVolume)
+
         val shooterBody = bodyMapper[entity].body
         val upgrades = engine.getSystem<UpgradeSystem>().upgrades
 

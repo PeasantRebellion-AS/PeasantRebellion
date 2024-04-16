@@ -1,5 +1,6 @@
 package com.peasantrebellion.view
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -39,7 +40,28 @@ class SettingsView : View {
             value = PeasantRebellion.getInstance().music.volume
             // Set size and position
             setSize(musicSliderBackground.width.toFloat(), musicSliderBackground.height.toFloat())
-            setPosition((WIDTH - musicSliderBackground.width.toFloat() - musicSliderKnob.width.toFloat()) / 2, 250f)
+            setPosition((WIDTH - musicSliderBackground.width.toFloat() - musicSliderKnob.width.toFloat()) / 2, 750f)
+        }
+
+    // Sound effects slider
+    private val soundEffectsSliderBackground = Texture("menu/slider.png")
+    private val soundEffectsSliderKnob = Texture("menu/knob.png")
+    val soundEffectsSlider: Slider =
+        Slider(
+            0f,
+            1f,
+            0.01f,
+            false,
+            Slider.SliderStyle().apply {
+                background = TextureRegionDrawable(TextureRegion(soundEffectsSliderBackground))
+                knob = TextureRegionDrawable(TextureRegion(soundEffectsSliderKnob))
+            },
+        ).apply {
+            // Set knob position to sound effects volume
+            value = PeasantRebellion.getInstance().soundEffectsVolume
+            // Set size and position
+            setSize(soundEffectsSliderBackground.width.toFloat(), soundEffectsSliderBackground.height.toFloat())
+            setPosition((WIDTH - soundEffectsSliderBackground.width.toFloat() - soundEffectsSliderKnob.width.toFloat()) / 2, 500f)
         }
 
     override fun render() {
@@ -54,10 +76,14 @@ class SettingsView : View {
             with(menuFont) {
                 // settings title
                 font.data.setScale(6f)
+                font.color = Color.BLACK
                 drawCentered(it, "Settings", GameEndView.WIDTH / 2, GameEndView.HEIGHT - 200f)
                 // music title over slider
                 font.data.setScale(4f)
+                font.color = Color.WHITE
                 drawCentered(it, "Music", GameEndView.WIDTH / 2, musicSlider.y + 150f)
+                // sound effects title over slider
+                drawCentered(it, "Sound Effects", GameEndView.WIDTH / 2, soundEffectsSlider.y + 150f)
             }
 
             // Music slider
@@ -75,6 +101,21 @@ class SettingsView : View {
                 musicSliderKnob.width.toFloat(),
                 musicSliderKnob.height.toFloat(),
             )
+            // Sound effects slider
+            batch.draw(
+                soundEffectsSliderBackground,
+                soundEffectsSlider.x,
+                soundEffectsSlider.y,
+                soundEffectsSlider.width + soundEffectsSliderKnob.width,
+                soundEffectsSlider.height,
+            )
+            batch.draw(
+                soundEffectsSliderKnob,
+                soundEffectsSlider.x + soundEffectsSlider.width * soundEffectsSlider.percent,
+                soundEffectsSlider.y,
+                soundEffectsSliderKnob.width.toFloat(),
+                soundEffectsSliderKnob.height.toFloat(),
+            )
         }
         viewport.camera.update()
     }
@@ -86,6 +127,8 @@ class SettingsView : View {
         background.disposeSafely()
         musicSliderBackground.disposeSafely()
         musicSliderKnob.disposeSafely()
+        soundEffectsSliderBackground.disposeSafely()
+        soundEffectsSliderKnob.disposeSafely()
     }
 
     companion object ScreenSize {
