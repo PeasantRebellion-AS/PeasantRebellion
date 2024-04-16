@@ -59,6 +59,10 @@ class GameView(
         MenuFont().also {
             it.font.data.setScale(3f)
         }
+    private val settingsFont =
+        MenuFont().also {
+            it.font.data.setScale(4f)
+        }
 
     var shopVisible = false
     val sideMenuButtons =
@@ -265,7 +269,7 @@ class GameView(
                 // quit button
                 it.draw(settingsQuitButton.texture, settingsQuitButton.x, settingsQuitButton.y)
 
-                with(menuFont) {
+                with(settingsFont) {
                     // settings title
                     font.data.setScale(4f)
                     font.color = Color.BLACK
@@ -393,6 +397,10 @@ class GameView(
         sideMenu.disposeSafely()
         shopMenu.disposeSafely()
         coin.disposeSafely()
+        musicSliderBackground.disposeSafely()
+        musicSliderKnob.disposeSafely()
+        soundEffectsSliderBackground.disposeSafely()
+        soundEffectsSliderKnob.disposeSafely()
         batch.disposeSafely()
     }
 }
