@@ -25,6 +25,14 @@ class SettingsController(private val settingsView: SettingsView) : Controller {
                 // Update the music volume
                 updateMusicVolume(newValue)
             }
+            // if user input is within bounds of sound effects slider
+            if (x >= settingsView.soundEffectsSlider.x && x <= settingsView.soundEffectsSlider.x + settingsView.soundEffectsSlider.width &&
+                y >= settingsView.soundEffectsSlider.y && y <= settingsView.soundEffectsSlider.y + settingsView.soundEffectsSlider.height
+            ) {
+                val newValue = (x - settingsView.soundEffectsSlider.x) / settingsView.soundEffectsSlider.width
+                settingsView.soundEffectsSlider.value = newValue
+                PeasantRebellion.getInstance().soundEffectsVolume = newValue
+            }
         }
     }
 

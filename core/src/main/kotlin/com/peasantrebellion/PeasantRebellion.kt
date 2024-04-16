@@ -12,6 +12,7 @@ const val SCREEN_HEIGHT = 1280f
 
 class PeasantRebellion : ApplicationAdapter() {
     private lateinit var screen: Screen
+    var soundEffectsVolume = 1f
 
     companion object {
         @Volatile
