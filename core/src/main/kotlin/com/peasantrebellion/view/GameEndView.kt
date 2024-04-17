@@ -28,9 +28,11 @@ class GameEndView(
         TextField.TextFieldStyle().apply {
             font = textFieldFont
             font.data.setScale(3f)
+            font.data.padLeft = -20f
             fontColor = Color.BLACK
             background = TextureRegionDrawable(textFieldBackground)
         }
+    var inputError = false
 
     // input field
     var textField: TextField =
@@ -74,6 +76,14 @@ class GameEndView(
                     WIDTH / 2,
                     submitButton.y + fontButtonYOffset,
                 )
+            }
+
+            if (inputError) {
+                with(menuFont) {
+                    font.color = Color.WHITE
+                    font.data.setScale(1.5f)
+                    drawCentered(it, "Player name must be between 1 and 13 characters!", WIDTH / 2, HEIGHT - 375f)
+                }
             }
         }
         viewport.camera.update()

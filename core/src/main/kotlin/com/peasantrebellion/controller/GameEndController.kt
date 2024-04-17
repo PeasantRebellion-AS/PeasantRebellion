@@ -30,7 +30,11 @@ class GameEndController(
 
     // Update the text field on input
     override fun input(playerName: String) {
-        gameEndView.textField.text = playerName
+        if (playerName.length in 1..13) {
+            gameEndView.textField.text = playerName
+        } else {
+            gameEndView.inputError = true
+        }
     }
 
     // default to the goat if user cancels

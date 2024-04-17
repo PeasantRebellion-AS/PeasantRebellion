@@ -23,12 +23,15 @@ class LeaderboardView : View {
     private val leaderboard = PeasantRebellion.getInstance().leaderboard
     private var topPlayers = emptyList<Pair<String, Long>>()
 
-    override fun render() {
-        clearScreen(red = 0f, green = 0f, blue = 0f)
-        // load top 10 players
+    // load top 10 players
+    init {
         leaderboard?.loadTopHighScores(10) { highScores ->
             topPlayers = highScores
         }
+    }
+
+    override fun render() {
+        clearScreen(red = 0f, green = 0f, blue = 0f)
         batch.projectionMatrix = viewport.camera.combined
         batch.use {
             // background
@@ -42,8 +45,9 @@ class LeaderboardView : View {
 
                 // draw all players
                 val lineHeight = 75f
+                font.data.setScale(3f)
                 topPlayers.forEachIndexed { index, (playerName, score) ->
-                    val yPosition = HEIGHT - 300f - index * lineHeight
+                    val yPosition = HEIGHT - 350f - index * lineHeight
                     menuFont.drawCentered(it, "$playerName - $score", WIDTH / 2, yPosition)
                 }
             }
