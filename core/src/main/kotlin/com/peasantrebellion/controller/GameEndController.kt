@@ -10,9 +10,12 @@ import com.peasantrebellion.view.GameEndView
 class GameEndController(
     private val gameEndView: GameEndView,
 ) : Controller, Input.TextInputListener {
+    private val leaderboard = PeasantRebellion.getInstance().leaderboard
+
     override fun update(deltaTime: Float) {
         whenJustTouched { x, y ->
             if (gameEndView.submitButton.containsCoordinates(x, y)) {
+                leaderboard?.addHighScoreEntry(gameEndView.textField.text, gameEndView.score.toLong())
                 PeasantRebellion.getInstance().switchTo(Screen.mainMenu())
                 PeasantRebellion.getInstance().music.play()
             }

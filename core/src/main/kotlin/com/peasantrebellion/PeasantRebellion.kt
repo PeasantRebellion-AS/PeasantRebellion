@@ -13,7 +13,7 @@ const val SCREEN_HEIGHT = 1280f
 
 class PeasantRebellion : ApplicationAdapter() {
     private lateinit var screen: Screen
-    var firebase: Leaderboard? = null
+    var leaderboard: Leaderboard? = null
     var soundEffectsVolume = 1f
 
     companion object {
