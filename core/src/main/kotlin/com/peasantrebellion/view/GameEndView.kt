@@ -39,7 +39,7 @@ class GameEndView(
             setPosition((WIDTH - textFieldBackground.width.toFloat()) / 2, 750f)
         }
 
-    val mainMenuButton =
+    val submitButton =
         Texture("menu/large_button.png").let { largeButton ->
             Button(largeButton, (WIDTH / 2) - (largeButton.width / 2), 400f)
         }
@@ -49,7 +49,7 @@ class GameEndView(
         batch.projectionMatrix = viewport.camera.combined
         batch.use {
             // Main Menu button
-            it.draw(mainMenuButton.texture, mainMenuButton.x, mainMenuButton.y)
+            it.draw(submitButton.texture, submitButton.x, submitButton.y)
 
             // draw input field background and input string
             it.draw(textFieldBackground, textField.x, textField.y, textField.width, textField.height)
@@ -67,12 +67,12 @@ class GameEndView(
                 // Main Menu button text
                 font.color = Color.BLACK
                 font.data.setScale(3f)
-                val fontButtonYOffset = mainMenuButton.height / 2 + 15f
+                val fontButtonYOffset = submitButton.height / 2 + 15f
                 drawCentered(
                     it,
                     "Submit",
                     WIDTH / 2,
-                    mainMenuButton.y + fontButtonYOffset,
+                    submitButton.y + fontButtonYOffset,
                 )
             }
         }
@@ -82,7 +82,7 @@ class GameEndView(
     override fun dispose() {
         batch.disposeSafely()
         menuFont.disposeSafely()
-        mainMenuButton.texture.disposeSafely()
+        submitButton.texture.disposeSafely()
     }
 
     companion object ScreenSize {

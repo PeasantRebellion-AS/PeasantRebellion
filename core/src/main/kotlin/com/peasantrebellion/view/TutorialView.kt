@@ -45,7 +45,7 @@ class TutorialView : View {
     fun handleNext() {
         val nextTutorial = currentTutorial.toInt() + 1
         currentTutorial = nextTutorial.toString()
-        tutorialBackground.dispose()
+        tutorialBackground.disposeSafely()
         tutorialBackground = Texture("tutorial/tutorial_$currentTutorial.png")
     }
 

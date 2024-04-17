@@ -12,8 +12,7 @@ class GameEndController(
 ) : Controller, Input.TextInputListener {
     override fun update(deltaTime: Float) {
         whenJustTouched { x, y ->
-            val touchedMainMenuButton = gameEndView.mainMenuButton.containsCoordinates(x, y)
-            if (touchedMainMenuButton) {
+            if (gameEndView.submitButton.containsCoordinates(x, y)) {
                 PeasantRebellion.getInstance().switchTo(Screen.mainMenu())
                 PeasantRebellion.getInstance().music.play()
             }
@@ -26,7 +25,7 @@ class GameEndController(
         }
     }
 
-    // Update the text field in input
+    // Update the text field on input
     override fun input(playerName: String) {
         gameEndView.textField.text = playerName
     }
