@@ -2,7 +2,10 @@ package com.peasantrebellion.view
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.scenes.scene2d.ui.TextField
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.SCREEN_HEIGHT
 import com.peasantrebellion.SCREEN_WIDTH
@@ -18,6 +21,24 @@ class GameEndView(
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val menuFont = MenuFont()
+
+    private val textFieldBackground = Texture("menu/large_button.png")
+    private val textFieldFont = BitmapFont()
+    private val textFieldStyle =
+        TextField.TextFieldStyle().apply {
+            font = textFieldFont
+            font.data.setScale(3f)
+            fontColor = Color.BLACK
+            background = TextureRegionDrawable(textFieldBackground)
+        }
+
+    // input field
+    var textField: TextField =
+        TextField("Player 1", textFieldStyle).apply {
+            setSize(textFieldBackground.width.toFloat(), textFieldBackground.height.toFloat())
+            setPosition((WIDTH - textFieldBackground.width.toFloat()) / 2, 750f)
+        }
+
     val mainMenuButton =
         Texture("menu/large_button.png").let { largeButton ->
             Button(largeButton, (WIDTH / 2) - (largeButton.width / 2), 400f)
@@ -29,6 +50,10 @@ class GameEndView(
         batch.use {
             // Main Menu button
             it.draw(mainMenuButton.texture, mainMenuButton.x, mainMenuButton.y)
+
+            // draw input field background and input string
+            it.draw(textFieldBackground, textField.x, textField.y, textField.width, textField.height)
+            textField.draw(it, 1f)
 
             with(menuFont) {
                 // Game Over
@@ -45,7 +70,7 @@ class GameEndView(
                 val fontButtonYOffset = mainMenuButton.height / 2 + 15f
                 drawCentered(
                     it,
-                    "Main Menu",
+                    "Submit",
                     WIDTH / 2,
                     mainMenuButton.y + fontButtonYOffset,
                 )
