@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Entity
 import com.badlogic.ashley.core.EntitySystem
 import com.badlogic.ashley.core.Family
+import com.badlogic.gdx.Gdx
 import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.Screen
 import com.peasantrebellion.model.components.AnimationComponent
@@ -38,6 +39,9 @@ class HealthSystem : EntitySystem() {
     private val healthMapper = ComponentMapper.getFor(HealthComponent::class.java)
     private val projectileMapper = ComponentMapper.getFor(ProjectileComponent::class.java)
 
+    private val gameOverSound = Gdx.audio.newSound(Gdx.files.internal("sfx/game-over.wav"))
+    private val hitSound = Gdx.audio.newSound(Gdx.files.internal("sfx/player-hit.wav"))
+
     private fun takeDamage(
         entity: Entity,
         damage: Int,
@@ -60,6 +64,8 @@ class HealthSystem : EntitySystem() {
     private fun killPlayer() {
         PeasantRebellion.getInstance()
             .switchTo(Screen.gameEnd(engine.getSystem<ScoreSystem>().score))
+        PeasantRebellion.getInstance().music.stop()
+        gameOverSound.play(PeasantRebellion.getInstance().soundEffectsVolume)
     }
 
     fun hitWithArrow(
@@ -89,6 +95,7 @@ class HealthSystem : EntitySystem() {
             }
         } else {
             takeDamage(target, 1) { killPlayer() }
+            hitSound.play(PeasantRebellion.getInstance().soundEffectsVolume)
             engine.removeEntity(arrow)
         }
     }

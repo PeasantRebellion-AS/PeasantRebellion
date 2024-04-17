@@ -13,6 +13,7 @@ class GameEndController(
             val touchedMainMenuButton = gameEndView.mainMenuButton.containsCoordinates(x, y)
             if (touchedMainMenuButton) {
                 PeasantRebellion.getInstance().switchTo(Screen.mainMenu())
+                PeasantRebellion.getInstance().music.play()
             }
         }
     }
