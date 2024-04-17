@@ -3,12 +3,14 @@ package com.peasantrebellion
 import com.peasantrebellion.controller.Controller
 import com.peasantrebellion.controller.GameController
 import com.peasantrebellion.controller.GameEndController
+import com.peasantrebellion.controller.LeaderboardController
 import com.peasantrebellion.controller.MainMenuController
 import com.peasantrebellion.controller.SettingsController
 import com.peasantrebellion.controller.TutorialController
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.view.GameEndView
 import com.peasantrebellion.view.GameView
+import com.peasantrebellion.view.LeaderboardView
 import com.peasantrebellion.view.MainMenuView
 import com.peasantrebellion.view.SettingsView
 import com.peasantrebellion.view.TutorialView
@@ -55,6 +57,11 @@ class Screen private constructor(
         fun tutorial(): Screen {
             val tutorialView = TutorialView()
             return Screen(TutorialController(tutorialView), tutorialView)
+        }
+
+        fun leaderboard(): Screen {
+            val leaderboardView = LeaderboardView()
+            return Screen(LeaderboardController(leaderboardView), leaderboardView)
         }
     }
 }

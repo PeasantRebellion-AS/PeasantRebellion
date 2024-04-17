@@ -90,49 +90,45 @@ class GameView(
     val settingsBackButton = Button(backButton, Game.WIDTH / 2 - 300f, Game.HEIGHT / 2 + shopMenu.height / 2 - 130f)
     val settingsQuitButton = Button(Texture("menu/large_button.png"), TutorialView.WIDTH / 2 - 200f, TutorialView.HEIGHT - 1000f)
 
+    // slider styling
+    private val sliderBackground = Texture("menu/slider.png")
+    private val sliderKnob = Texture("menu/knob.png")
+    private val sliderStyle =
+        Slider.SliderStyle().apply {
+            background = TextureRegionDrawable(TextureRegion(sliderBackground))
+            knob = TextureRegionDrawable(TextureRegion(sliderKnob))
+        }
+
     // Music slider
-    private val musicSliderBackground = Texture("menu/slider.png")
-    private val musicSliderKnob = Texture("menu/knob.png")
     val musicSlider: Slider =
         Slider(
             0f,
             1f,
             0.01f,
             false,
-            Slider.SliderStyle().apply {
-                background = TextureRegionDrawable(TextureRegion(musicSliderBackground))
-                knob = TextureRegionDrawable(TextureRegion(musicSliderKnob))
-            },
+            sliderStyle,
         ).apply {
             // Set knob position to music volume
             value = PeasantRebellion.getInstance().music.volume
             // Set size and position
-            setSize(musicSliderBackground.width.toFloat(), musicSliderBackground.height.toFloat())
-            setPosition((SettingsView.WIDTH - musicSliderBackground.width.toFloat() - musicSliderKnob.width.toFloat()) / 2, 750f)
+            setSize(sliderBackground.width.toFloat(), sliderBackground.height.toFloat())
+            setPosition((SettingsView.WIDTH - sliderBackground.width.toFloat() - sliderKnob.width.toFloat()) / 2, 750f)
         }
 
     // Sound effects slider
-    private val soundEffectsSliderBackground = Texture("menu/slider.png")
-    private val soundEffectsSliderKnob = Texture("menu/knob.png")
     val soundEffectsSlider: Slider =
         Slider(
             0f,
             1f,
             0.01f,
             false,
-            Slider.SliderStyle().apply {
-                background = TextureRegionDrawable(TextureRegion(soundEffectsSliderBackground))
-                knob = TextureRegionDrawable(TextureRegion(soundEffectsSliderKnob))
-            },
+            sliderStyle,
         ).apply {
             // Set knob position to sound effects volume
             value = PeasantRebellion.getInstance().soundEffectsVolume
             // Set size and position
-            setSize(soundEffectsSliderBackground.width.toFloat(), soundEffectsSliderBackground.height.toFloat())
-            setPosition(
-                (SettingsView.WIDTH - soundEffectsSliderBackground.width.toFloat() - soundEffectsSliderKnob.width.toFloat()) / 2,
-                500f,
-            )
+            setSize(sliderBackground.width.toFloat(), sliderBackground.height.toFloat())
+            setPosition((SettingsView.WIDTH - sliderBackground.width.toFloat() - sliderKnob.width.toFloat()) / 2, 500f)
         }
 
     override fun render() {
@@ -285,33 +281,33 @@ class GameView(
 
                 // music slider
                 batch.draw(
-                    musicSliderBackground,
+                    sliderBackground,
                     musicSlider.x,
                     musicSlider.y,
-                    musicSlider.width + musicSliderKnob.width,
+                    musicSlider.width + sliderKnob.width,
                     musicSlider.height,
                 )
                 batch.draw(
-                    musicSliderKnob,
+                    sliderKnob,
                     musicSlider.x + musicSlider.width * musicSlider.percent,
                     musicSlider.y,
-                    musicSliderKnob.width.toFloat(),
-                    musicSliderKnob.height.toFloat(),
+                    sliderKnob.width.toFloat(),
+                    sliderKnob.height.toFloat(),
                 )
                 // Sound effects slider
                 batch.draw(
-                    soundEffectsSliderBackground,
+                    sliderBackground,
                     soundEffectsSlider.x,
                     soundEffectsSlider.y,
-                    soundEffectsSlider.width + soundEffectsSliderKnob.width,
+                    soundEffectsSlider.width + sliderKnob.width,
                     soundEffectsSlider.height,
                 )
                 batch.draw(
-                    soundEffectsSliderKnob,
+                    sliderKnob,
                     soundEffectsSlider.x + soundEffectsSlider.width * soundEffectsSlider.percent,
                     soundEffectsSlider.y,
-                    soundEffectsSliderKnob.width.toFloat(),
-                    soundEffectsSliderKnob.height.toFloat(),
+                    sliderKnob.width.toFloat(),
+                    sliderKnob.height.toFloat(),
                 )
             }
         }
@@ -397,10 +393,8 @@ class GameView(
         sideMenu.disposeSafely()
         shopMenu.disposeSafely()
         coin.disposeSafely()
-        musicSliderBackground.disposeSafely()
-        musicSliderKnob.disposeSafely()
-        soundEffectsSliderBackground.disposeSafely()
-        soundEffectsSliderKnob.disposeSafely()
+        sliderBackground.disposeSafely()
+        sliderKnob.disposeSafely()
         batch.disposeSafely()
     }
 }

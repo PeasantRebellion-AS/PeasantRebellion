@@ -11,49 +11,55 @@ import ktx.app.clearScreen
 import ktx.assets.disposeSafely
 import ktx.graphics.use
 
-class TutorialView : View {
+class LeaderboardView : View {
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val menuFont = MenuFont()
 
-    var currentTutorial = "1"
-    private var tutorialBackground = Texture("tutorial/tutorial_$currentTutorial.png")
+    private var background = Texture("menu/leaderboard_background.png")
 
-    val backButton = Button(Texture("menu/back_button.png"), 50f, HEIGHT - 250f)
-    val nextButton = Button(Texture("menu/large_button.png"), WIDTH / 2 - 200f, HEIGHT - 1000f)
+    val backButton = Button(Texture("menu/back_button.png"), 50f, HEIGHT - 150f)
+
+    private val leaderboard = PeasantRebellion.getInstance().leaderboard
+    private var topPlayers = emptyList<Pair<String, Long>>()
+
+    // load top 10 players
+    init {
+        leaderboard?.loadTopHighScores(10) { highScores ->
+            topPlayers = highScores
+        }
+    }
 
     override fun render() {
         clearScreen(red = 0f, green = 0f, blue = 0f)
         batch.projectionMatrix = viewport.camera.combined
         batch.use {
-            // tutorial
-            it.draw(tutorialBackground, 0f, 0f)
+            // background
+            it.draw(background, 0f, 0f)
             // back button
             it.draw(backButton.texture, backButton.x, backButton.y)
-            // next button
-            it.draw(nextButton.texture, nextButton.x, nextButton.y)
-
             with(menuFont) {
-                // Next title
-                font.data.setScale(4f)
-                drawCentered(it, "Next", GameEndView.WIDTH / 2, HEIGHT - 940f)
+                // Leaderboard Title
+                font.data.setScale(5f)
+                drawCentered(it, "Top Players", GameEndView.WIDTH / 2, GameEndView.HEIGHT - 200f)
+
+                // draw all players
+                val lineHeight = 75f
+                font.data.setScale(3f)
+                topPlayers.forEachIndexed { index, (playerName, score) ->
+                    val yPosition = HEIGHT - 350f - index * lineHeight
+                    menuFont.drawCentered(it, "$playerName - $score", WIDTH / 2, yPosition)
+                }
             }
         }
         viewport.camera.update()
-    }
-
-    fun handleNext() {
-        val nextTutorial = currentTutorial.toInt() + 1
-        currentTutorial = nextTutorial.toString()
-        tutorialBackground.disposeSafely()
-        tutorialBackground = Texture("tutorial/tutorial_$currentTutorial.png")
     }
 
     override fun dispose() {
         batch.disposeSafely()
         menuFont.disposeSafely()
         backButton.texture.disposeSafely()
-        tutorialBackground.disposeSafely()
+        background.disposeSafely()
     }
 
     companion object ScreenSize {
