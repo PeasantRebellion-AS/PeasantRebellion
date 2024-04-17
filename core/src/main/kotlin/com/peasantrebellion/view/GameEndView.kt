@@ -13,14 +13,15 @@ import ktx.assets.disposeSafely
 import ktx.graphics.use
 
 class GameEndView(
-    private val score: Int,
+    val score: Int,
 ) : View {
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
     private val menuFont = MenuFont()
-    val mainMenuButton = Texture("menu/large_button.png").let { largeButton ->
-        Button(largeButton, (WIDTH / 2) - (largeButton.width / 2), 400f)
-    }
+    val mainMenuButton =
+        Texture("menu/large_button.png").let { largeButton ->
+            Button(largeButton, (WIDTH / 2) - (largeButton.width / 2), 400f)
+        }
 
     override fun render() {
         clearScreen(red = 0f, green = 0f, blue = 0f)
@@ -29,15 +30,15 @@ class GameEndView(
             // Main Menu button
             it.draw(mainMenuButton.texture, mainMenuButton.x, mainMenuButton.y)
 
-            with (menuFont) {
+            with(menuFont) {
                 // Game Over
                 font.color = Color.RED
                 font.data.setScale(6f)
-                drawCentered(it,"Game Over", WIDTH / 2, HEIGHT - 100f)
+                drawCentered(it, "Game Over", WIDTH / 2, HEIGHT - 100f)
                 // Score
                 font.color = Color.WHITE
                 font.data.setScale(3f)
-                drawCentered(it, "Score: $score",WIDTH / 2,HEIGHT - 200f)
+                drawCentered(it, "Score: $score", WIDTH / 2, HEIGHT - 200f)
                 // Main Menu button text
                 font.color = Color.BLACK
                 font.data.setScale(3f)
@@ -46,7 +47,7 @@ class GameEndView(
                     it,
                     "Main Menu",
                     WIDTH / 2,
-                    mainMenuButton.y + fontButtonYOffset
+                    mainMenuButton.y + fontButtonYOffset,
                 )
             }
         }

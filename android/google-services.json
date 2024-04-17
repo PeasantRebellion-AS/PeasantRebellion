@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "857430272917",
+    "project_id": "peasantrebellion-4a4eb",
+    "storage_bucket": "peasantrebellion-4a4eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857430272917:android:8433f7b28fc7c5daf0a49c",
+        "android_client_info": {
+          "package_name": "com.peasantrebellion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUMl3XyuWbmYaydrIyHwteGJHOZ5hxSxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

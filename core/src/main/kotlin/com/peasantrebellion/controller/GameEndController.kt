@@ -14,7 +14,6 @@ class GameEndController(
             if (touchedMainMenuButton) {
                 PeasantRebellion.getInstance().switchTo(Screen.mainMenu())
             }
-
         }
     }
 }

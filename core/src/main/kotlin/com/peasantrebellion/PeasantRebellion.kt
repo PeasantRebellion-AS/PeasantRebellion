@@ -6,12 +6,14 @@ import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.peasantrebellion.model.Game
+import com.peasantrebellion.model.Leaderboard
 
 const val SCREEN_WIDTH = 720f
 const val SCREEN_HEIGHT = 1280f
 
 class PeasantRebellion : ApplicationAdapter() {
     private lateinit var screen: Screen
+    var firebase: Leaderboard? = null
 
     companion object {
         @Volatile
