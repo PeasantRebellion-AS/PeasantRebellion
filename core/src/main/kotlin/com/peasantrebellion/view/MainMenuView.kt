@@ -23,6 +23,7 @@ class MainMenuView : View {
     private val crown = Texture("menu/crown.png")
     private val splashText = Texture("menu/splash_text.png")
     private val sword = Texture("menu/sword.png")
+    private val board = Texture("menu/plank.png")
     val buttons =
         listOf(
             // Singleplayer, multiplayer, leaderboard, tutorial and settings
@@ -79,6 +80,9 @@ class MainMenuView : View {
             HEIGHT / 2 + heightOffset - 350f,
         )
         batch.end()
+        batch.use {
+            it.draw(board, WIDTH / 2 - board.width / 2, HEIGHT / 2 - 50f)
+        }
         viewport.camera.update()
     }
 
@@ -88,6 +92,7 @@ class MainMenuView : View {
         batch.disposeSafely()
         crown.disposeSafely()
         menuFont.disposeSafely()
+        board.disposeSafely()
     }
 
     companion object ScreenSize {
