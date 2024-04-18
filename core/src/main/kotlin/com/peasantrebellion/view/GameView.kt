@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.scenes.scene2d.ui.Slider
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Timer
 import com.peasantrebellion.PeasantRebellion
 import com.peasantrebellion.model.Game
 import com.peasantrebellion.model.components.BodyComponent
@@ -51,6 +52,22 @@ class GameView(
     private val fullHeart = Texture("hearts/heart_full.png")
     private val coin = Texture("copper_coin.png")
 
+    private var showStartMessage = true
+
+    init {
+        Timer.schedule(
+            object : Timer.Task() {
+                override fun run() {
+                    if (Game.paused) {
+                        return
+                    }
+                    showStartMessage = false
+                }
+            },
+            5f,
+        )
+    }
+
     private val menuFont =
         MenuFont().also {
             it.font.data.setScale(4f)
@@ -62,6 +79,10 @@ class GameView(
     private val settingsFont =
         MenuFont().also {
             it.font.data.setScale(4f)
+        }
+    private val startMessageFont =
+        MenuFont().also {
+            it.font.data.setScale(2f)
         }
 
     var shopVisible = false
@@ -171,6 +192,27 @@ class GameView(
                     displayDebugBodyOutline(body, shapeRenderer)
                     it.begin()
                 }
+            }
+            // Render a temporary text that says "Defend the king from the peasants!" at the start of the game
+            if (showStartMessage) {
+                val textPart1 = "Defend the king"
+                val textPart2 = "from the peasants!"
+
+                val layout1 = GlyphLayout(startMessageFont.font, textPart1)
+                val layout2 = GlyphLayout(startMessageFont.font, textPart2)
+
+                val textWidth1 = layout1.width
+                val textHeight1 = layout1.height
+                val textWidth2 = layout2.width
+
+                val x1 = (Game.WIDTH - textWidth1) / 2
+                val y1 = (Game.HEIGHT + textHeight1) / 2
+
+                val x2 = (Game.WIDTH - textWidth2) / 2
+                val y2 = y1 - textHeight1 - 10f
+
+                startMessageFont.font.draw(it, textPart1, x1, y1)
+                startMessageFont.font.draw(it, textPart2, x2, y2)
             }
             // Top bar and side menu
             it.draw(sideMenu, Game.WIDTH - sideMenu.width, Game.HEIGHT / 2 - sideMenu.height / 2)
@@ -390,6 +432,7 @@ class GameView(
         background.disposeSafely()
         menuFont.disposeSafely()
         scoreFont.disposeSafely()
+        startMessageFont.disposeSafely()
         sideMenu.disposeSafely()
         shopMenu.disposeSafely()
         coin.disposeSafely()
