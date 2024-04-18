@@ -73,8 +73,11 @@ class EnemyMovementSystem : IteratingSystem(
         deltaTime: Float,
     ) {
         val body = bodyMapper[entity].body
+
+        // Get current movement speed from EnemyWaveSystem
+        val currentMovementSpeed = (engine.getSystem(EnemyWaveSystem::class.java) as EnemyWaveSystem).getCurrentMovementSpeed()
         healthMapper[entity].timeSinceHit += deltaTime
         // Move the peasant to either the right or left, depending on the direction
-        body.x += ENEMY_MOVEMENT_SPEED * deltaTime * direction
+        body.x += currentMovementSpeed * deltaTime * direction
     }
 }
