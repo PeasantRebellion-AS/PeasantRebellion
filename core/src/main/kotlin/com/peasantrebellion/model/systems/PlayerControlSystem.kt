@@ -14,7 +14,6 @@ const val PLAYER_MOVEMENT_SPEED = 1400f
 
 class PlayerControlSystem : EntitySystem() {
     private val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
-    private val healthMapper = ComponentMapper.getFor(HealthComponent::class.java)
 
     private val playerFamily =
         Family.all(
@@ -22,13 +21,6 @@ class PlayerControlSystem : EntitySystem() {
             UserControlledComponent::class.java,
             HealthComponent::class.java,
         ).get()
-
-    override fun update(deltaTime: Float) {
-        super.update(deltaTime)
-        val player = engine.getEntitiesFor(playerFamily).first()
-
-        healthMapper[player].timeSinceHit += deltaTime
-    }
 
     fun moveTowards(
         xTarget: Float,
