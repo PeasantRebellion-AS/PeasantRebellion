@@ -62,6 +62,10 @@ class GameEndView(
                 font.color = Color.RED
                 font.data.setScale(6f)
                 drawCentered(it, "Game Over", WIDTH / 2, HEIGHT - 100f)
+                // Reason for losing
+                font.color = Color.WHITE
+                font.data.setScale(2f)
+                drawCentered(it, reason, WIDTH / 2, HEIGHT - 225f)
                 // Score
                 font.color = Color.WHITE
                 font.data.setScale(3f)

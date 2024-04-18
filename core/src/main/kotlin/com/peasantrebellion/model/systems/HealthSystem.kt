@@ -63,7 +63,7 @@ class HealthSystem : EntitySystem() {
 
     private fun killPlayer() {
         PeasantRebellion.getInstance()
-            .switchTo(Screen.gameEnd(engine.getSystem<ScoreSystem>().score))
+            .switchTo(Screen.gameEnd(engine.getSystem<ScoreSystem>().score, "You died!"))
         PeasantRebellion.getInstance().music.stop()
         gameOverSound.play(PeasantRebellion.getInstance().soundEffectsVolume)
     }
