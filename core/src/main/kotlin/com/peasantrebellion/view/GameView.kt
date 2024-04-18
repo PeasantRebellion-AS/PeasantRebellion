@@ -259,19 +259,8 @@ class GameView(
             val score = game.system(ScoreSystem::class.java).score
             scoreFont.font.draw(
                 it,
-                "You: $score",
+                "Score: $score",
                 20f,
-                50f,
-            )
-            // Add check for multiplayer here when implemented
-            val opponentScore = 0
-            val opponentScoreText = "Foe: $opponentScore"
-            val layout = GlyphLayout(scoreFont.font, opponentScoreText)
-            val textWidth = layout.width
-            scoreFont.font.draw(
-                it,
-                opponentScoreText,
-                Game.WIDTH - 20f - textWidth,
                 50f,
             )
 
