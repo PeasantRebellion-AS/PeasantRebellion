@@ -44,11 +44,8 @@ class Screen private constructor(
             return Screen(SettingsController(settingsView), settingsView)
         }
 
-        fun gameEnd(
-            score: Int,
-            defeatMessage: String,
-        ): Screen {
-            val gameEndView = GameEndView(score, defeatMessage)
+        fun gameEnd(score: Int): Screen {
+            val gameEndView = GameEndView(score)
             return Screen(GameEndController(gameEndView), gameEndView)
         }
 

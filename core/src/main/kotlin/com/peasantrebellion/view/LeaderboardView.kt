@@ -43,12 +43,6 @@ class LeaderboardView : View {
                 font.data.setScale(5f)
                 drawCentered(it, "Top Players", GameEndView.WIDTH / 2, GameEndView.HEIGHT - 200f)
 
-                // Print loading
-                if (topPlayers.isEmpty()) {
-                    font.data.setScale(3f)
-                    drawCentered(it, "Loading...", GameEndView.WIDTH / 2, GameEndView.HEIGHT - 400f)
-                }
-
                 // draw all players
                 val lineHeight = 75f
                 font.data.setScale(3f)

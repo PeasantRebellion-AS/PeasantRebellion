@@ -63,7 +63,7 @@ class HealthSystem : EntitySystem() {
 
     private fun killPlayer() {
         PeasantRebellion.getInstance()
-            .switchTo(Screen.gameEnd(engine.getSystem<ScoreSystem>().score, "You died!"))
+            .switchTo(Screen.gameEnd(engine.getSystem<ScoreSystem>().score))
         PeasantRebellion.getInstance().music.stop()
         gameOverSound.play(PeasantRebellion.getInstance().soundEffectsVolume)
     }
@@ -98,11 +98,5 @@ class HealthSystem : EntitySystem() {
             hitSound.play(PeasantRebellion.getInstance().soundEffectsVolume)
             engine.removeEntity(arrow)
         }
-    }
-
-    override fun update(deltaTime: Float) {
-        val player = engine.getEntitiesFor(playerFamily).first()
-
-        healthMapper[player].timeSinceHit += deltaTime
     }
 }

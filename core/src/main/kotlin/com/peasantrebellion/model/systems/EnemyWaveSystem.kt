@@ -17,7 +17,13 @@ class EnemyWaveSystem : EntitySystem() {
     private val numPeasantsPerLine = 5
     private val spacingX = 100f
     private val spacingY = 100f
-    private val peasantTypes = arrayOf("easy", "medium", "hard")
+    private var currentMovementSpeed = ENEMY_MOVEMENT_SPEED
+    private var waveNumber = 0
+    private var initialMediumPercentage = 0
+    private var initialHardPercentage = 0
+    private var mediumPercentageIncrease = 0.1f
+    private var hardPercentageIncrease = 0.05f
+    private var movementSpeedMultiplicator = 1.1f
 
     init {
         Timer.schedule(
@@ -37,6 +43,7 @@ class EnemyWaveSystem : EntitySystem() {
     private fun spawnWave() {
         val bodyMapper = ComponentMapper.getFor(BodyComponent::class.java)
 
+        // Finds the leftmost peasant
         val leftmostPeasant =
             engine.getEntitiesFor(
                 Family.all(BodyComponent::class.java)
@@ -44,20 +51,46 @@ class EnemyWaveSystem : EntitySystem() {
             )
                 .minByOrNull { bodyMapper[it].body.x }
 
+        // Determine the start position of the wave
         val startX =
             leftmostPeasant?.let { bodyMapper[it].body.x }
                 ?: ((Game.WIDTH - (numPeasantsPerLine - 1) * spacingX) / 2)
 
+        // Increases the percentage of the chance of spawning hard peasants
+        val mediumPercentage = initialMediumPercentage + (waveNumber * mediumPercentageIncrease)
+        val hardPercentage = initialHardPercentage + (waveNumber * hardPercentageIncrease)
+
         (0 until numLines).forEach { lineIndex ->
-            val yCoordinate = Game.HEIGHT + (lineIndex * spacingY)
+            val yCoordinate = Game.HEIGHT + (lineIndex * spacingY) + 150
 
             (0 until numPeasantsPerLine).forEach { peasantIndex ->
                 val xCoordinate = startX + (peasantIndex * spacingX)
-                val typeIndex = (lineIndex + peasantIndex) % peasantTypes.size
-                val type = peasantTypes[typeIndex]
+
+                // Determine if the peasant should be easy, medium or hard
+                val type = when {
+                    (Math.random() < hardPercentage) -> "hard"
+                    (Math.random() < mediumPercentage) -> "medium"
+                    else -> "easy"
+                }
+
                 val healthSystem = engine.getSystem<HealthSystem>()
-                engine.addEntity(peasant(type, xCoordinate, yCoordinate, ((typeIndex.toFloat() + 1) / 2), healthSystem::hitWithArrow))
+
+                // Determine the fire rate of the different types
+                val fireRate = when (type) {
+                    "hard" -> 1.5f
+                    "medium" -> 1f
+                    else -> 0.5f
+                }
+
+                engine.addEntity(peasant(type, xCoordinate, yCoordinate, fireRate, healthSystem::hitWithArrow))
             }
         }
+        // Increase the movement speed and wave number
+        currentMovementSpeed *= movementSpeedMultiplicator
+        waveNumber++
+    }
+
+    fun getCurrentMovementSpeed(): Float {
+        return currentMovementSpeed
     }
 }

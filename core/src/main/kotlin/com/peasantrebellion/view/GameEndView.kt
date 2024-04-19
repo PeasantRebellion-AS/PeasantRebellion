@@ -17,7 +17,6 @@ import ktx.graphics.use
 
 class GameEndView(
     val score: Int,
-    private val defeatMessage: String,
 ) : View {
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
@@ -39,7 +38,7 @@ class GameEndView(
     var textField: TextField =
         TextField("Player 1", textFieldStyle).apply {
             setSize(textFieldBackground.width.toFloat(), textFieldBackground.height.toFloat())
-            setPosition((WIDTH - textFieldBackground.width.toFloat()) / 2, 600f)
+            setPosition((WIDTH - textFieldBackground.width.toFloat()) / 2, 750f)
         }
 
     val submitButton =
@@ -63,15 +62,10 @@ class GameEndView(
                 font.color = Color.RED
                 font.data.setScale(6f)
                 drawCentered(it, "Game Over", WIDTH / 2, HEIGHT - 100f)
-                // Reason for losing
-                font.color = Color.WHITE
-                font.data.setScale(2f)
-                drawCentered(it, defeatMessage, WIDTH / 2, HEIGHT - 225f)
                 // Score
+                font.color = Color.WHITE
                 font.data.setScale(3f)
-                drawCentered(it, "Score: $score", WIDTH / 2, HEIGHT - 300f)
-                // Enter your name
-                drawCentered(it, "Enter your name:", WIDTH / 2, HEIGHT - 525f)
+                drawCentered(it, "Score: $score", WIDTH / 2, HEIGHT - 200f)
                 // Main Menu button text
                 font.color = Color.BLACK
                 font.data.setScale(3f)

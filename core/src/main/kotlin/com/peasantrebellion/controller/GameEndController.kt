@@ -23,7 +23,7 @@ class GameEndController(
             if (x >= gameEndView.textField.x && x <= gameEndView.textField.x + gameEndView.textField.width &&
                 y >= gameEndView.textField.y && y <= gameEndView.textField.y + gameEndView.textField.height
             ) {
-                Gdx.input.getTextInput(this, "", "", "Write your name")
+                Gdx.input.getTextInput(this, "Peasant Suppressor", "", "Write your name")
             }
         }
     }
