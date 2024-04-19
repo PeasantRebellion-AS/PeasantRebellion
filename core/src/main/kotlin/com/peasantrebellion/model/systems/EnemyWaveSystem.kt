@@ -19,8 +19,8 @@ class EnemyWaveSystem : EntitySystem() {
     private val spacingY = 100f
     private var currentMovementSpeed = ENEMY_MOVEMENT_SPEED
     private var waveNumber = 0
-    private var initialMediumPercentage = 0.2f
-    private var initialHardPercentage = 0.2f
+    private var initialMediumPercentage = 0
+    private var initialHardPercentage = 0
     private var mediumPercentageIncrease = 0.1f
     private var hardPercentageIncrease = 0.05f
     private var movementSpeedMultiplicator = 1.1f
