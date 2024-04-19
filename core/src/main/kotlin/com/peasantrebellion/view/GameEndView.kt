@@ -17,7 +17,7 @@ import ktx.graphics.use
 
 class GameEndView(
     val score: Int,
-    private val reason: String,
+    private val defeatMessage: String,
 ) : View {
     private val viewport = PeasantRebellion.getInstance().viewport
     private val batch = SpriteBatch()
@@ -66,7 +66,7 @@ class GameEndView(
                 // Reason for losing
                 font.color = Color.WHITE
                 font.data.setScale(2f)
-                drawCentered(it, reason, WIDTH / 2, HEIGHT - 225f)
+                drawCentered(it, defeatMessage, WIDTH / 2, HEIGHT - 225f)
                 // Score
                 font.data.setScale(3f)
                 drawCentered(it, "Score: $score", WIDTH / 2, HEIGHT - 300f)
