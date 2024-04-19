@@ -39,6 +39,6 @@ class GameEndController(
 
     // default to the goat if user cancels
     override fun canceled() {
-        gameEndView.textField.text = "Bae Suzy"
+        gameEndView.textField.text = "Unknown"
     }
 }
