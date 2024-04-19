@@ -108,8 +108,14 @@ class GameView(
         )
 
     var settingsVisible = false
-    val settingsBackButton = Button(backButton, Game.WIDTH / 2 - 300f, Game.HEIGHT / 2 + shopMenu.height / 2 - 130f)
-    val settingsQuitButton = Button(Texture("menu/large_button.png"), TutorialView.WIDTH / 2 - 200f, TutorialView.HEIGHT - 1000f)
+    val settingsBackButton =
+        Button(backButton, Game.WIDTH / 2 - 300f, Game.HEIGHT / 2 + shopMenu.height / 2 - 130f)
+    val settingsQuitButton =
+        Button(
+            Texture("menu/large_button.png"),
+            TutorialView.WIDTH / 2 - 200f,
+            TutorialView.HEIGHT - 1000f,
+        )
 
     // slider styling
     private val sliderBackground = Texture("menu/slider.png")
@@ -133,7 +139,10 @@ class GameView(
             value = PeasantRebellion.getInstance().music.volume
             // Set size and position
             setSize(sliderBackground.width.toFloat(), sliderBackground.height.toFloat())
-            setPosition((SettingsView.WIDTH - sliderBackground.width.toFloat() - sliderKnob.width.toFloat()) / 2, 750f)
+            setPosition(
+                (SettingsView.WIDTH - sliderBackground.width.toFloat() - sliderKnob.width.toFloat()) / 2,
+                750f,
+            )
         }
 
     // Sound effects slider
@@ -149,7 +158,10 @@ class GameView(
             value = PeasantRebellion.getInstance().soundEffectsVolume
             // Set size and position
             setSize(sliderBackground.width.toFloat(), sliderBackground.height.toFloat())
-            setPosition((SettingsView.WIDTH - sliderBackground.width.toFloat() - sliderKnob.width.toFloat()) / 2, 500f)
+            setPosition(
+                (SettingsView.WIDTH - sliderBackground.width.toFloat() - sliderKnob.width.toFloat()) / 2,
+                500f,
+            )
         }
 
     override fun render() {
@@ -305,7 +317,12 @@ class GameView(
                     font.data.setScale(3f)
                     drawCentered(it, "Music", GameEndView.WIDTH / 2, musicSlider.y + 150f)
                     // sound effects title over slider
-                    drawCentered(it, "Sound Effects", GameEndView.WIDTH / 2, soundEffectsSlider.y + 150f)
+                    drawCentered(
+                        it,
+                        "Sound Effects",
+                        GameEndView.WIDTH / 2,
+                        soundEffectsSlider.y + 150f,
+                    )
                     // quit text
                     drawCentered(it, "Quit", GameEndView.WIDTH / 2, TutorialView.HEIGHT - 940f)
                 }
@@ -347,11 +364,14 @@ class GameView(
         if (shopVisible) {
             val upgradeSystem = game.system(UpgradeSystem::class.java)
             val upgradePrices = upgradeSystem.upgradePrices
+            val coinSystem = game.system(CoinSystem::class.java)
             val font = scoreFont.font
 
             // This is awful, but I don't want to spend time changing it
             if (upgradeSystem.upgrades.hasDoubleShot || upgradeSystem.upgrades.hasTripleShot) {
                 font.color = Color.DARK_GRAY
+            } else if (coinSystem.balance < upgradePrices.doubleShotPrice) {
+                font.color = Color.RED
             }
             font.draw(
                 batch,
@@ -362,6 +382,8 @@ class GameView(
             font.color = Color.BLACK
             if (upgradeSystem.upgrades.hasTripleShot) {
                 font.color = Color.DARK_GRAY
+            } else if (coinSystem.balance < upgradePrices.tripleShotPrice) {
+                font.color = Color.RED
             }
             font.draw(
                 batch,
@@ -372,6 +394,8 @@ class GameView(
             font.color = Color.BLACK
             if (upgradeSystem.upgrades.hasDoubleDamage || upgradeSystem.upgrades.hasTripleDamage) {
                 font.color = Color.DARK_GRAY
+            } else if (coinSystem.balance < upgradePrices.doubleDamagePrice) {
+                font.color = Color.RED
             }
             font.draw(
                 batch,
@@ -382,6 +406,8 @@ class GameView(
             font.color = Color.BLACK
             if (upgradeSystem.upgrades.hasTripleDamage) {
                 font.color = Color.DARK_GRAY
+            } else if (coinSystem.balance < upgradePrices.tripleDamagePrice) {
+                font.color = Color.RED
             }
             font.draw(
                 batch,
@@ -392,6 +418,8 @@ class GameView(
             font.color = Color.BLACK
             if (upgradeSystem.upgrades.hasPiercingShots) {
                 font.color = Color.DARK_GRAY
+            } else if (coinSystem.balance < upgradePrices.piercingShotsPrice) {
+                font.color = Color.RED
             }
             font.draw(
                 batch,
