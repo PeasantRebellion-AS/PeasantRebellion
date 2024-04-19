@@ -13,13 +13,12 @@ import com.peasantrebellion.model.systems.AnimationSystem
 import com.peasantrebellion.model.systems.CoinSystem
 import com.peasantrebellion.model.systems.CollisionSystem
 import com.peasantrebellion.model.systems.EnemyMovementSystem
-import com.peasantrebellion.model.systems.EnemyShootingSystem
 import com.peasantrebellion.model.systems.EnemyWaveSystem
 import com.peasantrebellion.model.systems.HealthSystem
 import com.peasantrebellion.model.systems.PlayerControlSystem
-import com.peasantrebellion.model.systems.PlayerShootingSystem
 import com.peasantrebellion.model.systems.ProjectileMovementSystem
 import com.peasantrebellion.model.systems.ScoreSystem
+import com.peasantrebellion.model.systems.ShootingSystem
 import com.peasantrebellion.model.systems.UpgradeSystem
 
 class Game {
@@ -34,8 +33,7 @@ class Game {
         // Systems
         engine.addSystem(PlayerControlSystem())
         engine.addSystem(EnemyMovementSystem())
-        engine.addSystem(PlayerShootingSystem())
-        engine.addSystem(EnemyShootingSystem())
+        engine.addSystem(ShootingSystem())
         engine.addSystem(AnimationSystem())
         engine.addSystem(EnemyWaveSystem())
         engine.addSystem(ProjectileMovementSystem())
