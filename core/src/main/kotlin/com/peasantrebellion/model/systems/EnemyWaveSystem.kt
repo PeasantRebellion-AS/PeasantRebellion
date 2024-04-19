@@ -19,6 +19,11 @@ class EnemyWaveSystem : EntitySystem() {
     private val spacingY = 100f
     private var currentMovementSpeed = ENEMY_MOVEMENT_SPEED
     private var waveNumber = 0
+    private var initialMediumPercentage = 0.2f
+    private var initialHardPercentage = 0.2f
+    private var mediumPercentageIncrease = 0.1f
+    private var hardPercentageIncrease = 0.05f
+    private var movementSpeedMultiplicator = 1.1f
 
     init {
         Timer.schedule(
@@ -52,8 +57,8 @@ class EnemyWaveSystem : EntitySystem() {
                 ?: ((Game.WIDTH - (numPeasantsPerLine - 1) * spacingX) / 2)
 
         // Increases the percentage of the chance of spawning hard peasants
-        val mediumPercentage = 0.2f + (waveNumber * 0.1f)
-        val hardPercentage = 0.2f + (waveNumber * 0.05f)
+        val mediumPercentage = initialMediumPercentage + (waveNumber * mediumPercentageIncrease)
+        val hardPercentage = initialHardPercentage + (waveNumber * hardPercentageIncrease)
 
         (0 until numLines).forEach { lineIndex ->
             val yCoordinate = Game.HEIGHT + (lineIndex * spacingY) + 150
@@ -81,7 +86,7 @@ class EnemyWaveSystem : EntitySystem() {
             }
         }
         // Increase the movement speed and wave number
-        currentMovementSpeed *= 1.1f
+        currentMovementSpeed *= movementSpeedMultiplicator
         waveNumber++
     }
 
