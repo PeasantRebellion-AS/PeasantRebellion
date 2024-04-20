@@ -14,10 +14,10 @@ import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import ktx.ashley.getSystem
 
-const val ENEMY_MOVEMENT_SPEED = 50f // Temporary value, can be adjusted
+const val ENEMY_MOVEMENT_SPEED = 50f
 
 // Once the enemies cross this line, the player loses.
-const val GAME_OVER_LINE_Y = 200f
+const val GAME_OVER_LINE_Y = 150f
 
 class EnemyMovementSystem : IteratingSystem(
     Family.all(
@@ -63,6 +63,7 @@ class EnemyMovementSystem : IteratingSystem(
             PeasantRebellion.getInstance().switchTo(
                 Screen.gameEnd(
                     engine.getSystem<ScoreSystem>().score,
+                    "The peasants reached the king!",
                 ),
             )
         }
@@ -73,11 +74,8 @@ class EnemyMovementSystem : IteratingSystem(
         deltaTime: Float,
     ) {
         val body = bodyMapper[entity].body
-
-        // Get current movement speed from EnemyWaveSystem
-        val currentMovementSpeed = (engine.getSystem(EnemyWaveSystem::class.java) as EnemyWaveSystem).getCurrentMovementSpeed()
         healthMapper[entity].timeSinceHit += deltaTime
         // Move the peasant to either the right or left, depending on the direction
-        body.x += currentMovementSpeed * deltaTime * direction
+        body.x += ENEMY_MOVEMENT_SPEED * deltaTime * direction
     }
 }
