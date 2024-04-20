@@ -61,7 +61,7 @@ class EnemyWaveSystem : EntitySystem() {
         val hardPercentage = initialHardPercentage + (waveNumber * hardPercentageIncrease)
 
         (0 until numLines).forEach { lineIndex ->
-            val yCoordinate = Game.HEIGHT + (lineIndex * spacingY) + 150
+            val yCoordinate = Game.HEIGHT + (lineIndex * spacingY)
 
             (0 until numPeasantsPerLine).forEach { peasantIndex ->
                 val xCoordinate = startX + (peasantIndex * spacingX)
