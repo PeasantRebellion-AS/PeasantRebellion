@@ -101,8 +101,8 @@ class HealthSystem : EntitySystem() {
     }
 
     override fun update(deltaTime: Float) {
-        val player = engine.getEntitiesFor(playerFamily).first()
-
-        healthMapper[player].timeSinceHit += deltaTime
+        for (player in engine.getEntitiesFor(playerFamily)) {
+            healthMapper[player].timeSinceHit += deltaTime
+        }
     }
 }

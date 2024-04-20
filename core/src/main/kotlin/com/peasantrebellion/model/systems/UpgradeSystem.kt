@@ -12,10 +12,10 @@ data class Upgrade(
 
 data class UpgradePrice(
     val doubleShotPrice: Int = 20,
-    val tripleShotPrice: Int = 50,
+    val tripleShotPrice: Int = 150,
     val doubleDamagePrice: Int = 50,
-    val tripleDamagePrice: Int = 100,
-    val piercingShotsPrice: Int = 200,
+    val tripleDamagePrice: Int = 300,
+    val piercingShotsPrice: Int = 999,
 )
 
 class UpgradeSystem : EntitySystem() {
