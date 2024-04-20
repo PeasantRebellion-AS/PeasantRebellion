@@ -99,10 +99,4 @@ class HealthSystem : EntitySystem() {
             engine.removeEntity(arrow)
         }
     }
-
-    override fun update(deltaTime: Float) {
-        val player = engine.getEntitiesFor(playerFamily).first()
-
-        healthMapper[player].timeSinceHit += deltaTime
-    }
 }
