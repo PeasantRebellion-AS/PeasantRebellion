@@ -1,5 +1,7 @@
-# PeasantRebellion
+# Peasant Rebellion
 
+
+## Description of game concept
 Peasant Rebellion is a spin-off of the classic Atari game Space Invaders. There are starving peasants approaching in waves trying to attack you by shooting arrows. The goal of the game is to stay alive as long as possible, killing peasants and getting the highest possible score. The game ends when the player loses all their lives. The player is then prompted if they would like to save their score to the global leaderboard, inspired by old arcade machines, which is accessible from the main menu.
 
 ## How to compile and run the project
