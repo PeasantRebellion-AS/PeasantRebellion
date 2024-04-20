@@ -14,7 +14,7 @@ import com.peasantrebellion.model.components.TextureComponent
 import com.peasantrebellion.model.components.UserControlledComponent
 import ktx.ashley.getSystem
 
-const val ENEMY_MOVEMENT_SPEED = 50f
+const val ENEMY_MOVEMENT_SPEED = 80f
 
 // Once the enemies cross this line, the player loses.
 const val GAME_OVER_LINE_Y = 150f

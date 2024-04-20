@@ -14,29 +14,33 @@ import com.peasantrebellion.model.components.ShooterComponent
 import com.peasantrebellion.model.components.TextureComponent
 import ktx.assets.toInternalFile
 
-const val DEFAULT_SCORE = 5
+const val SCORE_UNIT = 5
 
-/**
- * A peasant entity.
- *
- * @param difficulty the difficulty class (easy, medium, hard) of the peasant, used to get the textures.
- * @param xPos the starting x position for the peasant.
- * @param yPos the starting y position for the peasant.
- */
+enum class PeasantDifficulty(
+    val textureName: String,
+    val scoreMultiplier: Int,
+    val copper: Int,
+    val fireRate: Float,
+) {
+    EASY("easy", 1, 1, 0.5f),
+    MEDIUM("medium", 2, 2, 1f),
+    HARD("hard", 3, 3, 1.5f),
+}
+
 fun peasant(
-    difficulty: String,
+    difficulty: PeasantDifficulty,
     xPos: Float,
     yPos: Float,
-    fireRate: Float,
+    hp: Int,
     onCollisionWithArrow: (peasant: Entity, arrow: Entity) -> Unit,
 ): Entity {
     val textures: List<Texture> =
         listOf(
-            "peasant/$difficulty/${difficulty}_peasant1.png",
-            "peasant/$difficulty/${difficulty}_peasant2.png",
-            "peasant/$difficulty/${difficulty}_peasant3.png",
-            "peasant/$difficulty/${difficulty}_peasant4.png",
-            "peasant/$difficulty/${difficulty}_peasant5.png",
+            "peasant/${difficulty.textureName}/${difficulty.textureName}_peasant1.png",
+            "peasant/${difficulty.textureName}/${difficulty.textureName}_peasant2.png",
+            "peasant/${difficulty.textureName}/${difficulty.textureName}_peasant3.png",
+            "peasant/${difficulty.textureName}/${difficulty.textureName}_peasant4.png",
+            "peasant/${difficulty.textureName}/${difficulty.textureName}_peasant5.png",
         ).map { texturePath ->
             Texture(texturePath.toInternalFile(), true).apply {
                 setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
@@ -81,37 +85,9 @@ fun peasant(
                 textures,
             ),
         )
-        add(ShooterComponent(fireRate, enemyDrawDuration))
-        add(
-            HealthComponent(
-                when (difficulty) {
-                    "easy" -> 1
-                    "medium" -> 2
-                    "hard" -> 3
-                    else -> 1
-                },
-                .5f,
-            ),
-        )
-        add(
-            CopperDropperComponent(
-                when (difficulty) {
-                    "easy" -> 1
-                    "medium" -> 2
-                    "hard" -> 3
-                    else -> 0
-                },
-            ),
-        )
-        add(
-            ScoreValueComponent(
-                when (difficulty) {
-                    "easy" -> 1 * DEFAULT_SCORE
-                    "medium" -> 2 * DEFAULT_SCORE
-                    "hard" -> 3 * DEFAULT_SCORE
-                    else -> 0 * DEFAULT_SCORE
-                },
-            ),
-        )
+        add(ShooterComponent(difficulty.fireRate, enemyDrawDuration))
+        add(HealthComponent(hp, .5f))
+        add(CopperDropperComponent(difficulty.copper))
+        add(ScoreValueComponent(difficulty.scoreMultiplier * SCORE_UNIT))
     }
 }
